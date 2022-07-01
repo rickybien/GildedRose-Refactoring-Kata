@@ -33,6 +33,10 @@ class Shop {
             this.updateBackstagePassesItem(item);
           }
 
+          if (this.isConjuredItem(name)) {
+            this.updateConjuredItem(item);
+          }
+
           if (this.isNormalItem(name)) {
             this.updateNormalItem(item);
           }
@@ -55,8 +59,12 @@ class Shop {
     return name.includes('Backstage passes');
   }
 
+  isConjuredItem(name) {
+    return name.includes('Conjured');
+  }
+
   isNormalItem(name) {
-    return !this.isAgedBrieItem(name) && !this.isBackstagePassesItem(name);
+    return !this.isAgedBrieItem(name) && !this.isBackstagePassesItem(name) && !this.isConjuredItem(name);
   }
 
   updateNormalItem(item) {
@@ -92,6 +100,16 @@ class Shop {
       item.quality += 3;
     } else {
       item.quality = 0;
+    }
+  }
+
+  updateConjuredItem(item) {
+    const {name, sellIn, quality} = item;
+
+    if (sellIn < 0) {
+      item.quality -= 4;
+    } else {
+      item.quality -= 2;
     }
   }
 }
