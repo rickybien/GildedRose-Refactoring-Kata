@@ -6,7 +6,7 @@ use GildedRose\Item;
 
 abstract class QualityHandler
 {
-    protected bool $isChangeSellIn = true;
+    protected const IS_CHANGE_SELL_IN = true;
     protected const PER_QUALITY_DOWN_UNIT = 1;
     protected const MIN_QUALITY = 0;
     protected const MAX_QUALITY = 50;
@@ -21,7 +21,7 @@ abstract class QualityHandler
 
     final public function updateSellIn(): void
     {
-        if ($this->isChangeSellIn) {
+        if (static::IS_CHANGE_SELL_IN) {
             --$this->item->sellIn;
         }
     }
