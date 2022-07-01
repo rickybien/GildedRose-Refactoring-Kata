@@ -1,5 +1,5 @@
 class Item {
-  constructor(name, sellIn, quality){
+  constructor(name, sellIn, quality) {
     this.name = name;
     this.sellIn = sellIn;
     this.quality = quality;
@@ -7,71 +7,91 @@ class Item {
 }
 
 class Shop {
-  constructor(items=[]){
+  constructor(items = []) {
     this.items = items;
   }
 
-  get specialItemsName () {
-    return [
-      'Aged Brie', 'Sulfuras, Hand of Ragnaros', 'Backstage passes to a TAFKAL80ETC concert',
-    ];
-  }
-
   updateQuality() {
-    this.items.forEach(item => {
-      this.updateAgedBrieItem(item);
-      this.updateBackstagePassesItem(item);
-      this.updateNormalItem(item);
+    const {
+      items,
+      isLegendaryItem,
+      normalItemMap,
+    } = this;
+
+    items.forEach(item => {
+      const {name, quality} = item;
+
+      if (!isLegendaryItem(name)) {
+        item.sellIn -= 1;
+
+        if (quality > 0 && quality < 50) {
+          if (this.isAgedBrieItem(name)) {
+            this.updateAgedBrieItem(item);
+          }
+
+          if (this.isBackstagePassesItem(name)) {
+            this.updateBackstagePassesItem(item);
+          }
+
+          if (this.isNormalItem(name)) {
+            this.updateNormalItem(item);
+          }
+        }
+      }
     });
 
     return this.items;
   }
 
+  isLegendaryItem(name) {
+    return name.includes('Sulfuras');
+  }
+
+  isAgedBrieItem(name) {
+    return name.includes('Aged Brie');
+  }
+
+  isBackstagePassesItem(name) {
+    return name.includes('Backstage passes');
+  }
+
+  isNormalItem(name) {
+    return !this.isAgedBrieItem(name) && !this.isBackstagePassesItem(name);
+  }
+
   updateNormalItem(item) {
-    if (this.specialItemsName.includes(item.name)) {
-      return;
-    }
+    const {name, sellIn, quality} = item;
 
-    item.sellIn -= 1;
-
-    if (item.quality > 0 && item.quality <= 50) {
-      if (item.sellIn < 0) {
-        item.quality -= 2;
-      } else {
-        item.quality -= 1;
-      }
+    if (sellIn < 0) {
+      item.quality -= 2;
+    } else {
+      item.quality -= 1;
     }
   }
 
   updateAgedBrieItem(item) {
-    if (item.name === 'Aged Brie') {
-      item.sellIn -= 1;
+    const {name, sellIn, quality} = item;
 
-      if (item.quality > 0 && item.quality < 50) {
-        if (item.sellIn < 0 && item.quality !== 49) {
-          item.quality += 2;
-        } else {
-          item.quality += 1;
-        }
+    if (quality > 0 && quality < 50) {
+      if (sellIn < 0 && quality !== 49) {
+        item.quality += 2;
+      } else {
+        item.quality += 1;
       }
     }
   }
 
   updateBackstagePassesItem(item) {
-    if (item.name === 'Backstage passes to a TAFKAL80ETC concert') {
-      item.sellIn -= 1;
+    const {name, sellIn, quality} = item;
 
-      if (item.quality > 0 && item.quality < 50) {
-        if (item.sellIn >= 10) {
-          item.quality += 1;
-        } else if (item.sellIn < 10 && item.sellIn >= 6 && item.quality !== 49) {
-          item.quality += 2;
-        } else if (item.sellIn < 5 && item.sellIn >= 0 && item.quality !== 48) {
-          item.quality += 3;
-        } else {
-          item.quality = 0;
-        }
-      }
+    if (sellIn >= 10) {
+      item.quality += 1;
+    } else if (sellIn < 10 && sellIn >= 6 && quality !== 49) {
+      item.quality += 2;
+    } else if (sellIn < 5 && sellIn >= 0 && quality !== 48) {
+      item.quality += 3;
+    } else {
+      item.quality = 0;
     }
   }
 }
