@@ -10,8 +10,13 @@ class Shop {
   constructor(items=[]){
     this.items = items;
   }
+
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
+      this.updateNormalItem(this.items[i]);
+
+      break;
+
       if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
         if (this.items[i].quality > 0) {
           if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
@@ -58,6 +63,18 @@ class Shop {
     }
 
     return this.items;
+  }
+
+  updateNormalItem(item) {
+    item.sellIn -= 1;
+
+    if (item.quality > 0 && item.quality <= 50) {
+      if (item.sellIn < 0) {
+        item.quality -= 2;
+      } else {
+        item.quality -= 1;
+      }
+    }
   }
 }
 
