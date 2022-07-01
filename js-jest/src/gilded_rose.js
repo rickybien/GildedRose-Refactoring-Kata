@@ -82,6 +82,8 @@ class Shop {
         case 'Aged Brie':
           new AgedBrie(item).update();
           break;
+        case 'Sulfuras, Hand of Ragnaros':
+          break;
         default:
           new Normal(item).update();
           break;
