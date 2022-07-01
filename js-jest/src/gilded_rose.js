@@ -19,12 +19,12 @@ class Shop {
     } = this;
 
     items.forEach(item => {
-      const {name, quality} = item;
+      const {name} = item;
 
       if (!isLegendaryItem(name)) {
         item.sellIn -= 1;
 
-        if (quality > 0 && quality < 50) {
+        if (item.quality > 0 && item.quality < 50) {
           if (this.isAgedBrieItem(name)) {
             this.updateAgedBrieItem(item);
           }
@@ -40,6 +40,10 @@ class Shop {
           if (this.isNormalItem(name)) {
             this.updateNormalItem(item);
           }
+        }
+
+        if (item.quality > 50) {
+          item.quality = 50;
         }
       }
     });
@@ -67,25 +71,31 @@ class Shop {
     return !this.isAgedBrieItem(name) && !this.isBackstagePassesItem(name) && !this.isConjuredItem(name);
   }
 
+  minusItemQuality(item, quality = 1, multiple = 1) {
+    item.quality -= (quality * multiple);
+  }
+
+  plusItemQuality(item, quality = 1, multiple = 1) {
+    item.quality += (quality * multiple);
+  }
+
   updateNormalItem(item) {
     const {name, sellIn, quality} = item;
 
     if (sellIn < 0) {
-      item.quality -= 2;
+      this.minusItemQuality(item, 1, 2);
     } else {
-      item.quality -= 1;
+      this.minusItemQuality(item, 1, 1);
     }
   }
 
   updateAgedBrieItem(item) {
     const {name, sellIn, quality} = item;
 
-    if (quality > 0 && quality < 50) {
-      if (sellIn < 0 && quality !== 49) {
-        item.quality += 2;
-      } else {
-        item.quality += 1;
-      }
+    if (sellIn < 0) {
+      this.plusItemQuality(item, 1, 2);
+    } else {
+      this.plusItemQuality(item, 1, 1);
     }
   }
 
@@ -93,11 +103,11 @@ class Shop {
     const {name, sellIn, quality} = item;
 
     if (sellIn >= 10) {
-      item.quality += 1;
-    } else if (sellIn < 10 && sellIn >= 6 && quality !== 49) {
-      item.quality += 2;
-    } else if (sellIn < 5 && sellIn >= 0 && quality !== 48) {
-      item.quality += 3;
+      this.plusItemQuality(item, 1, 1);
+    } else if (sellIn < 10 && sellIn >= 6) {
+      this.plusItemQuality(item, 2, 1);
+    } else if (sellIn < 5 && sellIn >= 0) {
+      this.plusItemQuality(item, 3, 1);
     } else {
       item.quality = 0;
     }
@@ -107,9 +117,9 @@ class Shop {
     const {name, sellIn, quality} = item;
 
     if (sellIn < 0) {
-      item.quality -= 4;
+      this.minusItemQuality(item, 1, 4);
     } else {
-      item.quality -= 2;
+      this.minusItemQuality(item, 1, 2);
     }
   }
 }
