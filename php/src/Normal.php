@@ -18,15 +18,14 @@ class Normal
         --$this->item->sellIn;
     }
 
-    public function addQty(int $add): int
+    public function addQty(int $add): void
     {
-        $result = $this->item->quality + $add;
-        if ($result > self::QTY_MAX) {
-            return self::QTY_MAX;
+        $this->item->quality += $add;
+        if ($this->item->quality > self::QTY_MAX) {
+            $this->item->quality = self::QTY_MAX;
         }
-        if ($result < self::QTY_MIN) {
-            return self::QTY_MIN;
+        if ($this->item->quality < self::QTY_MIN) {
+            $this->item->quality = self::QTY_MIN;
         }
-        return $result;
     }
 }

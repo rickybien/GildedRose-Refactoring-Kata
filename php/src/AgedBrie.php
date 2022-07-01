@@ -9,9 +9,9 @@ class AgedBrie extends Normal
     public function calculate(): void
     {
         if ($this->item->sellIn < 0) {
-            $this->item->quality = $this->addQty(2);
+            $this->addQty(2);
         }else {
-            $this->item->quality = $this->addQty(1,);
+            $this->addQty(1);
         }
     }
 }
