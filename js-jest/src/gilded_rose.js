@@ -20,6 +20,7 @@ class Shop {
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       this.updateAgedBrieItem(this.items[i]);
+      this.updateBackstagePassesItem(this.items[i]);
       this.updateNormalItem(this.items[i]);
 
       break;
@@ -97,6 +98,24 @@ class Shop {
           item.quality += 2;
         } else {
           item.quality += 1;
+        }
+      }
+    }
+  }
+
+  updateBackstagePassesItem(item) {
+    if (item.name === 'Backstage passes to a TAFKAL80ETC concert') {
+      item.sellIn -= 1;
+
+      if (item.quality > 0 && item.quality < 50) {
+        if (item.sellIn >= 10) {
+          item.quality += 1;
+        } else if (item.sellIn < 10 && item.sellIn >= 6 && item.quality !== 49) {
+          item.quality += 2;
+        } else if (item.sellIn < 5 && item.sellIn >= 0 && item.quality !== 48) {
+          item.quality += 3;
+        } else {
+          item.quality = 0;
         }
       }
     }
