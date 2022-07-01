@@ -37,27 +37,10 @@ final class GildedRose
                     $agedBrie->calculate();
                     break;
                 default:
-                    $maxQty = 50;
-                    $minQty = 0;
-                    --$item->sellIn;
-                    $item->quality = $this->addQty($item->quality, -1, $maxQty, $minQty);
-                    if ($item->sellIn < 0) {
-                        $item->quality = $this->addQty($item->quality, -1, $maxQty, $minQty);
-                    }
-                    return;
+                    $agedBrie = new General($item);
+                    $agedBrie->calculate();
+                    break;
             }
         }
-    }
-
-    private function addQty(int $num,int $add, int $max, int $min): int
-    {
-        $result = $num + $add;
-        if ($result > $max) {
-            return $max;
-        }
-        if ($result < $min) {
-            return $min;
-        }
-        return $result;
     }
 }
