@@ -11,6 +11,7 @@ final class GildedRose
         'Backstage passes to a TAFKAL80ETC concert' => Backstage::class,
         'Sulfuras, Hand of Ragnaros' => Sulfuras::class,
         'normal' => Normal::class,
+        'Conjured' => Conjured::class,
     ];
     /**
      * @var Item[]
