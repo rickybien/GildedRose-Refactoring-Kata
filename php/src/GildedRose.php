@@ -33,14 +33,9 @@ final class GildedRose
                     $agedBrie->calculate();
                     break;
                 case 'Conjured':
-                    $maxQty = 50;
-                    $minQty = 0;
-                    --$item->sellIn;
-                    $item->quality = $this->addQty($item->quality, -2, $maxQty, $minQty);
-                    if ($item->sellIn < 0) {
-                        $item->quality = $this->addQty($item->quality, -2, $maxQty, $minQty);
-                    }
-                    return;
+                    $agedBrie = new Conjured($item);
+                    $agedBrie->calculate();
+                    break;
                 default:
                     $maxQty = 50;
                     $minQty = 0;
