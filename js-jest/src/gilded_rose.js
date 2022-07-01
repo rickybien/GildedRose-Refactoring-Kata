@@ -19,6 +19,7 @@ class Shop {
 
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
+      this.updateAgedBrieItem(this.items[i]);
       this.updateNormalItem(this.items[i]);
 
       break;
@@ -83,6 +84,20 @@ class Shop {
         item.quality -= 2;
       } else {
         item.quality -= 1;
+      }
+    }
+  }
+
+  updateAgedBrieItem(item) {
+    if (item.name === 'Aged Brie') {
+      item.sellIn -= 1;
+
+      if (item.quality > 0 && item.quality < 50) {
+        if (item.sellIn < 0 && item.quality !== 49) {
+          item.quality += 2;
+        } else {
+          item.quality += 1;
+        }
       }
     }
   }
