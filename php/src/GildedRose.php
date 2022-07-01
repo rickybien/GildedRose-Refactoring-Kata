@@ -6,6 +6,12 @@ namespace GildedRose;
 
 final class GildedRose
 {
+    public const CLAC_MAPPING = [
+        'Aged Brie' => AgedBrie::class,
+        'Backstage passes to a TAFKAL80ETC concert' => Backstage::class,
+        'Sulfuras, Hand of Ragnaros' => Sulfuras::class,
+        'normal' => Normal::class,
+    ];
     /**
      * @var Item[]
      */
@@ -19,26 +25,9 @@ final class GildedRose
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            switch ($item->name) {
-                case 'Aged Brie':
-                    $class = new AgedBrie($item);
-                    $class->clac();
-                    break;
-                case 'Backstage passes to a TAFKAL80ETC concert':
-                    $class = new Backstage($item);
-                    $class->clac();
-                    break;
-
-                case 'Sulfuras, Hand of Ragnaros':
-                    $class = new Sulfuras($item);
-                    $class->clac();
-                    break;
-                case 'normal':
-                    $class = new Normal($item);
-                    $class->clac();
-                    break;
-                    
-            }
+            $mapping = self::CLAC_MAPPING[$item->name] ?? Nothing::class;
+            $class = new $mapping($item);
+            $class->clac();
         }
     }
 }
