@@ -10,7 +10,12 @@ class Normal
     public const QTY_MIN = 0;
 
     public function __construct(public Item $item) {
+        $this->minusSellIn();
+    }
 
+    public function minusSellIn(): void
+    {
+        --$this->item->sellIn;
     }
 
     public function addQty(int $add): int

@@ -8,8 +8,6 @@ class BackstagePasses extends Normal
 {
     public function calculate(): void
     {
-        --$this->item->sellIn;
-
         $this->item->quality = $this->addQty(1);
 
         if ($this->item->sellIn < 10) {
