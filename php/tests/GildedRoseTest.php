@@ -424,7 +424,7 @@ class GildedRoseTest extends TestCase
         $app->updateQuality();
 
         // assert
-        $this->assertSame(9, $items[0]->sellIn);
+        $this->assertSame(-1, $items[0]->sellIn);
         $this->assertSame(0, $items[0]->quality);
     }
 }
