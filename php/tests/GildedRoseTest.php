@@ -371,4 +371,18 @@ class GildedRoseTest extends TestCase
         $this->assertSame(-6, $items[0]->sellIn);
         $this->assertSame(6, $items[0]->quality);
     }
+
+    public function testUpdatesConjuredItemsBeforeSellDateAQualityOf0(): void
+    {
+        // arrange
+        $items = [new Item('Conjured', 10, 0)];
+        $app = new GildedRose($items);
+
+        // act
+        $app->updateQuality();
+
+        // assert
+        $this->assertSame(9, $items[0]->sellIn);
+        $this->assertSame(0, $items[0]->quality);
+    }
 }
