@@ -58,7 +58,7 @@ final class GildedRose
                                 $item->quality = $item->quality - 1;
                             }
                             if ($item->name === 'Conjured') {
-                                $item->quality = $item->quality - 2;
+                                $item->quality = max($item->quality - 2, 0);
                             }
                         }
                     } else {
