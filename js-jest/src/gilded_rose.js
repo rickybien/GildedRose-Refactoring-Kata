@@ -1,4 +1,5 @@
 const AgedBrie = require('./AgedBrie');
+const Backstage = require('./Backstage');
 const Normal = require('./Normal');
 
 class Item {
@@ -83,6 +84,9 @@ class Shop {
           new AgedBrie(item).update();
           break;
         case 'Sulfuras, Hand of Ragnaros':
+          break;
+        case 'Backstage passes to a TAFKAL80ETC concert':
+          new Backstage(item).update();
           break;
         default:
           new Normal(item).update();
