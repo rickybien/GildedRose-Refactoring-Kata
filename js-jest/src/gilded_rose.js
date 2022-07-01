@@ -1,3 +1,5 @@
+const Normal = require('./Normal');
+
 class Item {
   constructor(name, sellIn, quality){
     this.name = name;
@@ -73,8 +75,13 @@ class Shop {
 
   updateQuality() {
     this.items.forEach(item => {
-      // this.updateItemSellIn(item);
-      // this.updateItemQuality(item);
+      const {name} = item;
+
+      switch(name) {
+        default:
+          new Normal(item).update();
+          break;
+      }
     });
 
     return this.items;
