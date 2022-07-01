@@ -51,6 +51,15 @@ final class GildedRose
                     // $maxQty = 80;
                     // $item->quality = $maxQty; // ?? 不確定
                     return;
+                case 'Conjured':
+                    $maxQty = 50;
+                    $minQty = 0;
+                    --$item->sellIn;
+                    $item->quality = $this->addQty($item->quality, -2, $maxQty, $minQty);
+                    if ($item->sellIn < 0) {
+                        $item->quality = $this->addQty($item->quality, -2, $maxQty, $minQty);
+                    }
+                    return;
                 default:
                     $maxQty = 50;
                     $minQty = 0;
