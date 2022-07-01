@@ -48,8 +48,10 @@ final class GildedRose
                         $item->quality = 0;
                     }
                     return;
-//                case 'Sulfuras, Hand of Ragnaros':
-//                    break;
+                case 'Sulfuras, Hand of Ragnaros':
+                    // $maxQty = 80;
+                    // $item->quality = $maxQty; // ?? 不確定
+                    return;
 //                default:
 //                    $item->sellIn = $item->sellIn - 1;
 //                    break;
