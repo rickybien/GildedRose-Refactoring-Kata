@@ -73,8 +73,8 @@ class Shop {
 
   updateQuality() {
     this.items.forEach(item => {
-      this.updateItemSellIn(item);
-      this.updateItemQuality(item);
+      // this.updateItemSellIn(item);
+      // this.updateItemQuality(item);
     });
 
     return this.items;
