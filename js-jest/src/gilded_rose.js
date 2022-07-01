@@ -1,3 +1,4 @@
+const AgedBrie = require('./AgedBrie');
 const Normal = require('./Normal');
 
 class Item {
@@ -78,6 +79,9 @@ class Shop {
       const {name} = item;
 
       switch(name) {
+        case 'Aged Brie':
+          new AgedBrie(item).update();
+          break;
         default:
           new Normal(item).update();
           break;
