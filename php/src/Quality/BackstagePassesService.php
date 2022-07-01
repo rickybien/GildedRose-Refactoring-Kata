@@ -18,6 +18,6 @@ class BackstagePassesService extends QualityHandler
                 $qualityRate = 3;
             }
         }
-        $item->quality = min($item->quality + $qualityRate, 50);
+        $item->quality = min($item->quality + $qualityRate, self::MAX_QUALITY);
     }
 }

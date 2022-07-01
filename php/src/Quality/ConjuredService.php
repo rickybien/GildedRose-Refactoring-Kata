@@ -11,6 +11,6 @@ class ConjuredService extends QualityHandler
         if ($item->sellIn < 0) {
             $qualityRate *= 2;
         }
-        $item->quality = max($item->quality - $qualityRate, 0);
+        $item->quality = max($item->quality - $qualityRate, self::MIN_QUALITY);
     }
 }

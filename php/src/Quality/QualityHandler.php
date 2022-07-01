@@ -8,6 +8,8 @@ abstract class QualityHandler
 {
     protected bool $isChangeSellIn = true;
     protected const PER_QUALITY_DOWN_UNIT = 1;
+    protected const MIN_QUALITY = 0;
+    protected const MAX_QUALITY = 50;
 
     final public function __construct(protected Item $item) {}
 
