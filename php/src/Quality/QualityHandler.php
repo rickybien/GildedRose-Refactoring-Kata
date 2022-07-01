@@ -6,7 +6,23 @@ use GildedRose\Item;
 
 abstract class QualityHandler
 {
+    protected bool $isChangeSellIn = true;
+    protected const PER_QUALITY_DOWN_UNIT = 1;
+
     final public function __construct(protected Item $item) {}
+
+    public function process(): void
+    {
+        $this->updateSellIn();
+        $this->updateQuality();
+    }
+
+    final public function updateSellIn(): void
+    {
+        if ($this->isChangeSellIn) {
+            --$this->item->sellIn;
+        }
+    }
 
     abstract public function updateQuality(): void;
 

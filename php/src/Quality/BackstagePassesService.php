@@ -7,8 +7,7 @@ class BackstagePassesService extends QualityHandler
     public function updateQuality(): void
     {
         $item = $this->item;
-        $item->sellIn = $item->sellIn -1;
-        $qualityRate = 1;
+        $qualityRate = self::PER_QUALITY_DOWN_UNIT;
         if ($item->sellIn < 0) {
             $item->quality = 0;
             return;

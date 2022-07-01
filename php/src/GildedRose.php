@@ -21,7 +21,7 @@ final class GildedRose
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            QualityHandler::getInstance($item)->updateQuality();
+            QualityHandler::getInstance($item)->process();
         }
     }
 }
