@@ -25,22 +25,9 @@ final class GildedRose
                     $agedBrie->calculate();
                     break;
                 case 'Backstage passes to a TAFKAL80ETC concert':
-                    $maxQty = 50;
-                    $minQty = 0;
-                    --$item->sellIn;
-
-                    $item->quality = $this->addQty($item->quality, 1, $maxQty, $minQty);
-
-                    if ($item->sellIn < 10) {
-                        $item->quality = $this->addQty($item->quality, 1, $maxQty, $minQty);
-                    }
-                    if ($item->sellIn < 5) {
-                        $item->quality = $this->addQty($item->quality, 1, $maxQty, $minQty);
-                    }
-                    if ($item->sellIn < 0) {
-                        $item->quality = 0;
-                    }
-                    return;
+                    $agedBrie = new BackstagePasses($item);
+                    $agedBrie->calculate();
+                    break;
                 case 'Sulfuras, Hand of Ragnaros':
                     // $maxQty = 80;
                     // $item->quality = $maxQty; // ?? 不確定
