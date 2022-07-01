@@ -31,22 +31,23 @@ final class GildedRose
                         $item->quality = $this->addQty($item->quality, 1, $maxQty, $minQty);
                     }
                     return;
-//                case 'Backstage passes to a TAFKAL80ETC concert':
-//                    $maxQty = 50;
-//                    $minQty = 0;
-//                    --$item->sellIn;
-//                    if ($item->quality < $maxQty) {
-//                        if ($item->sellIn < 10) {
-//                            $item->quality = $this->addQty($item->quality, 2, $maxQty, $minQty);
-//                        } else if ($item->sellIn < 5) {
-//                            $item->quality = $this->addQty($item->quality, 3, $maxQty, $minQty);
-//                        } else if ($item->sellIn < 1) {
-//                            $item->quality = 0;
-//                        } else {
-//                            $item->quality = $this->addQty($item->quality, 1, $maxQty, $minQty);
-//                        }
-//                    }
-//                    return;
+                case 'Backstage passes to a TAFKAL80ETC concert':
+                    $maxQty = 50;
+                    $minQty = 0;
+                    --$item->sellIn;
+
+                    $item->quality = $this->addQty($item->quality, 1, $maxQty, $minQty);
+
+                    if ($item->sellIn < 10) {
+                        $item->quality = $this->addQty($item->quality, 1, $maxQty, $minQty);
+                    }
+                    if ($item->sellIn < 5) {
+                        $item->quality = $this->addQty($item->quality, 1, $maxQty, $minQty);
+                    }
+                    if ($item->sellIn < 0) {
+                        $item->quality = 0;
+                    }
+                    return;
 //                case 'Sulfuras, Hand of Ragnaros':
 //                    break;
 //                default:
