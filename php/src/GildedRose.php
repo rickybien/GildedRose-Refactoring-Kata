@@ -21,15 +21,9 @@ final class GildedRose
         foreach ($this->items as $item) {
             switch ($item->name) {
                 case 'Aged Brie':
-                    $maxQty = 50;
-                    $minQty = 0;
-                    --$item->sellIn;
-                    if ($item->sellIn < 0) {
-                        $item->quality = $this->addQty($item->quality, 2, $maxQty, $minQty);
-                    }else {
-                        $item->quality = $this->addQty($item->quality, 1, $maxQty, $minQty);
-                    }
-                    return;
+                    $agedBrie = new AgedBrie($item);
+                    $agedBrie->calculate();
+                    break;
                 case 'Backstage passes to a TAFKAL80ETC concert':
                     $maxQty = 50;
                     $minQty = 0;
