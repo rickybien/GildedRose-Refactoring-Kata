@@ -11,6 +11,12 @@ class Shop {
     this.items = items;
   }
 
+  get specialItemsName () {
+    return [
+      'Aged Brie', 'Sulfuras, Hand of Ragnaros', 'Backstage passes to a TAFKAL80ETC concert',
+    ];
+  }
+
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       this.updateNormalItem(this.items[i]);
@@ -66,6 +72,10 @@ class Shop {
   }
 
   updateNormalItem(item) {
+    if (this.specialItemsName.includes(item.name)) {
+      return;
+    }
+
     item.sellIn -= 1;
 
     if (item.quality > 0 && item.quality <= 50) {
