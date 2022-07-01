@@ -29,9 +29,9 @@ final class GildedRose
                     $agedBrie->calculate();
                     break;
                 case 'Sulfuras, Hand of Ragnaros':
-                    // $maxQty = 80;
-                    // $item->quality = $maxQty; // ?? 不確定
-                    return;
+                    $agedBrie = new Sulfuras($item);
+                    $agedBrie->calculate();
+                    break;
                 case 'Conjured':
                     $maxQty = 50;
                     $minQty = 0;
