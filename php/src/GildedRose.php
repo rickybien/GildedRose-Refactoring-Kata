@@ -52,9 +52,15 @@ final class GildedRose
                     // $maxQty = 80;
                     // $item->quality = $maxQty; // ?? 不確定
                     return;
-//                default:
-//                    $item->sellIn = $item->sellIn - 1;
-//                    break;
+                default:
+                    $maxQty = 50;
+                    $minQty = 0;
+                    --$item->sellIn;
+                    $item->quality = $this->addQty($item->quality, -1, $maxQty, $minQty);
+                    if ($item->sellIn < 0) {
+                        $item->quality = $this->addQty($item->quality, -1, $maxQty, $minQty);
+                    }
+                    return;
             }
 
             if ($item->name != 'Aged Brie' and $item->name != 'Backstage passes to a TAFKAL80ETC concert') {
