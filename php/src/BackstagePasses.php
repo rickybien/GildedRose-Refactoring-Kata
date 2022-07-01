@@ -16,7 +16,7 @@ class BackstagePasses extends Normal
         if ($this->item->sellIn < 5) {
             $this->addQty(1);
         }
-        if ($this->item->sellIn < 0) {
+        if ($this->checkIsExpired()) {
             $this->item->quality = 0;
         }
     }

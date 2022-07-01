@@ -13,6 +13,11 @@ class Normal
         $this->minusSellIn();
     }
 
+    public function checkIsExpired(): bool
+    {
+        return $this->item->sellIn < 0;
+    }
+
     public function minusSellIn(): void
     {
         --$this->item->sellIn;
@@ -21,6 +26,17 @@ class Normal
     public function addQty(int $add): void
     {
         $this->item->quality += $add;
+        if ($this->item->quality > self::QTY_MAX) {
+            $this->item->quality = self::QTY_MAX;
+        }
+        if ($this->item->quality < self::QTY_MIN) {
+            $this->item->quality = self::QTY_MIN;
+        }
+    }
+
+    public function minusQty(int $minus): void
+    {
+        $this->item->quality -= $minus;
         if ($this->item->quality > self::QTY_MAX) {
             $this->item->quality = self::QTY_MAX;
         }
