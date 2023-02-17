@@ -48,25 +48,26 @@ class GildedRoseTest extends TestCase
 	// 測試奶酪
 	public function testAgedBrie(): void
 	{
+		$name = 'Aged Brie';
 		$items = [
-			new Item('Aged Brie', 0, 50),
-			new Item('Aged Brie', 0, 0),
-			new Item('Aged Brie', 10, 25),
+			new Item($name, 0, 50),
+			new Item($name, 0, 0),
+			new Item($name, 10, 25),
 		];
 
 		$excepted = [
 			[
-				'name' => 'Aged Brie',
+				'name' => $name,
 				'sellIn' => -1,
 				'quality' => 50,
 			],
 			[
-				'name' => 'Aged Brie',
+				'name' => $name,
 				'sellIn' => -1,
 				'quality' => 2,
 			],
 			[
-				'name' => 'Aged Brie',
+				'name' => $name,
 				'sellIn' => 9,
 				'quality' => 26,
 			],
