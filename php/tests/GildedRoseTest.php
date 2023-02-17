@@ -44,4 +44,39 @@ class GildedRoseTest extends TestCase
 			$this->assertSame($exceptedItem['quality'], $items[$index]->quality);
 		}
 	}
+
+	// 測試奶酪
+	public function testAgedBrie(): void
+	{
+		$items = [
+			new Item('Aged Brie', 0, 50),
+			new Item('Aged Brie', 0, 0),
+			new Item('Aged Brie', 10, 25),
+		];
+
+		$excepted = [
+			[
+				'name' => 'Aged Brie',
+				'sellIn' => -1,
+				'quality' => 50,
+			],
+			[
+				'name' => 'Aged Brie',
+				'sellIn' => -1,
+				'quality' => 2,
+			],
+			[
+				'name' => 'Aged Brie',
+				'sellIn' => 9,
+				'quality' => 26,
+			],
+		];
+		$gildedRose = new GildedRose($items);
+		$gildedRose->updateQuality();
+		foreach ($excepted as $index => $exceptedItem) {
+			$this->assertSame($exceptedItem['name'], $items[$index]->name);
+			$this->assertSame($exceptedItem['sellIn'], $items[$index]->sellIn);
+			$this->assertSame($exceptedItem['quality'], $items[$index]->quality);
+		}
+	}
 }
