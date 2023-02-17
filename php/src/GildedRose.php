@@ -15,14 +15,16 @@ final class GildedRose
     {
         $this->items = $items;
     }
-
-	public function updateQuality(): void
+	
+	public function updateQuality(): array
 	{
 		foreach ($this->items as &$item) {
 			// 時間老人工作中
 			$item->sellIn = $item->sellIn - 1;
 			$item = $this->process($item);
 		}
+
+		return $this->items;
 	}
 
 	private function process(object $item): object
