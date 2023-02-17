@@ -19,9 +19,6 @@ final class GildedRose
 	public function updateQuality(): void
 	{
 		foreach ($this->items as &$item) {
-			if (!$item->name || !$item->sellIn || !$item->quality) {
-				continue;
-			}
 			// 時間老人工作中
 			$item->sellIn = $item->sellIn - 1;
 			$item = $this->process($item);
