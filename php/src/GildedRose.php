@@ -100,9 +100,9 @@ final class GildedRose
 			} else if(!isset($item->name)) {
 				throw new \Exception('ER02: item name is undefined');
 			} else if(!isset($item->sellIn)) {
-				throw new \Exception('ER02: item sellIn is undefined');
+				throw new \Exception('ER03: item sellIn is undefined');
 			} else if(!isset($item->quality)) {
-				throw new \Exception('ER02: item quality is undefined');
+				throw new \Exception('ER04: item quality is undefined');
 			}
 		} catch (\Exception $exception) {
 			return [
