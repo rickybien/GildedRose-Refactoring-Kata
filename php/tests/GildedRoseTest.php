@@ -210,7 +210,7 @@ class GildedRoseTest extends TestCase
 			],
 			[
 				'error' => true,
-				'message' => 'ER04: item type is not object',
+				'message' => 'ER04: item quality is undefined',
 			],
 		];
 		$gildedRose = new GildedRose([
