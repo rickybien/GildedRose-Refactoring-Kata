@@ -59,6 +59,12 @@ final class GildedRose
 			case 'Sulfuras, Hand of Ragnaros':
 				$item->quality = 80;
 				break;
+			// 召喚物品
+			case 'Conjured':
+				// 過期會壞更快，損壞品質是一般物品兩倍
+				$minusNumber = $item->sellIn > 0 ? 2 : 4;
+				$item->quality = $this->minusQuality($item->quality, $minusNumber);
+				break;
 			// 一般物品
 			default:
 				// 過期會壞更快
