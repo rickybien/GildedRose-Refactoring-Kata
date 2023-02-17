@@ -140,4 +140,40 @@ class GildedRoseTest extends TestCase
 			$this->assertSame($exceptedItem['quality'], $items[$index]->quality);
 		}
 	}
+
+	// 測試炎魔手手邏輯
+	public function testSulfuras(): void
+	{
+		$name = 'Sulfuras, Hand of Ragnaros';
+		$items = [
+			new Item($name, 0, 0),
+			new Item($name, 10, 10),
+			new Item($name, 20, 1000),
+		];
+
+		$excepted = [
+			[
+				'name' => $name,
+				'sellIn' => -1,
+				'quality' => 80,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 9,
+				'quality' => 80,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 19,
+				'quality' => 80,
+			],
+		];
+		$gildedRose = new GildedRose($items);
+		$gildedRose->updateQuality();
+		foreach ($excepted as $index => $exceptedItem) {
+			$this->assertSame($exceptedItem['name'], $items[$index]->name);
+			$this->assertSame($exceptedItem['sellIn'], $items[$index]->sellIn);
+			$this->assertSame($exceptedItem['quality'], $items[$index]->quality);
+		}
+	}
 }
