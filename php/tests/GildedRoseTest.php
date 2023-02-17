@@ -33,9 +33,7 @@ class GildedRoseTest extends TestCase
 	    ]);
 	    $items = $gildedRose->updateQuality();
 		foreach ($excepted as $index => $exceptedItem) {
-			$this->assertSame($exceptedItem['name'], $items[$index]->name);
-			$this->assertSame($exceptedItem['sellIn'], $items[$index]->sellIn);
-			$this->assertSame($exceptedItem['quality'], $items[$index]->quality);
+			$this->testPattern($exceptedItem, $items[$index]);
 		}
     }
 	// 測試奶酪
@@ -66,9 +64,7 @@ class GildedRoseTest extends TestCase
 		]);
 		$items = $gildedRose->updateQuality();
 		foreach ($excepted as $index => $exceptedItem) {
-			$this->assertSame($exceptedItem['name'], $items[$index]->name);
-			$this->assertSame($exceptedItem['sellIn'], $items[$index]->sellIn);
-			$this->assertSame($exceptedItem['quality'], $items[$index]->quality);
+			$this->testPattern($exceptedItem, $items[$index]);
 		}
 	}
 
@@ -124,9 +120,7 @@ class GildedRoseTest extends TestCase
 		]);
 		$items = $gildedRose->updateQuality();
 		foreach ($excepted as $index => $exceptedItem) {
-			$this->assertSame($exceptedItem['name'], $items[$index]->name);
-			$this->assertSame($exceptedItem['sellIn'], $items[$index]->sellIn);
-			$this->assertSame($exceptedItem['quality'], $items[$index]->quality);
+			$this->testPattern($exceptedItem, $items[$index]);
 		}
 	}
 	// 測試炎魔手手邏輯
@@ -157,9 +151,7 @@ class GildedRoseTest extends TestCase
 		]);
 		$items = $gildedRose->updateQuality();
 		foreach ($excepted as $index => $exceptedItem) {
-			$this->assertSame($exceptedItem['name'], $items[$index]->name);
-			$this->assertSame($exceptedItem['sellIn'], $items[$index]->sellIn);
-			$this->assertSame($exceptedItem['quality'], $items[$index]->quality);
+			$this->testPattern($exceptedItem, $items[$index]);
 		}
 	}
 	// 測試召喚物品邏輯
@@ -190,9 +182,67 @@ class GildedRoseTest extends TestCase
 		]);
 		$items = $gildedRose->updateQuality();
 		foreach ($excepted as $index => $exceptedItem) {
-			$this->assertSame($exceptedItem['name'], $items[$index]->name);
-			$this->assertSame($exceptedItem['sellIn'], $items[$index]->sellIn);
-			$this->assertSame($exceptedItem['quality'], $items[$index]->quality);
+			$this->testPattern($exceptedItem, $items[$index]);
+		}
+	}
+
+
+	// 測試髒資料
+	public function testDirtyData(): void
+	{
+		$excepted = [
+			[
+				'name' => 'box',
+				'sellIn' => -1,
+				'quality' => 0,
+			],
+			[
+				'error' => true,
+				'message' => 'ER01: item type is not object',
+			],
+			[
+				'error' => true,
+				'message' => 'ER02: item name is undefined',
+			],
+			[
+				'error' => true,
+				'message' => 'ER03: item sellIn is undefined',
+			],
+			[
+				'error' => true,
+				'message' => 'ER04: item type is not object',
+			],
+		];
+		$gildedRose = new GildedRose([
+			new Item('box', 0, 0),
+			[],
+			(object) [
+				'sellIn' => -1,
+				'quality' => 0,
+			],
+			(object) [
+				'name' => 'box',
+				'quality' => 0,
+			],
+			(object) [
+				'name' => 'box',
+				'sellIn' => -1,
+			],
+		]);
+		$items = $gildedRose->updateQuality();
+		foreach ($excepted as $index => $exceptedItem) {
+			$this->testPattern($exceptedItem, $items[$index]);
+		}
+	}
+
+	private function testPattern(array $exceptedItem, $item): void
+	{
+		if (isset($exceptedItem['error'])) {
+			$this->assertSame($exceptedItem, $item);
+		} else {
+			$this->assertSame($exceptedItem['name'], $item->name);
+			$this->assertSame($exceptedItem['sellIn'], $item->sellIn);
+			$this->assertSame($exceptedItem['quality'], $item->quality);
 		}
 	}
 }
