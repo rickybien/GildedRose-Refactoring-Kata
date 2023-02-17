@@ -1,332 +1,248 @@
 <?php
-
 declare(strict_types=1);
-
 namespace Tests;
-
 use GildedRose\GildedRose;
 use GildedRose\Item;
 use PHPUnit\Framework\TestCase;
-
 class GildedRoseTest extends TestCase
 {
-    //-----------------
-    // normal item
-    //-----------------
-    public function testUpdatesNormalItemsBeforeSellDate(): void
-    {
-        // arrange
-        $items = [new Item('normal', 5, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(4, $items[0]->sellIn);
-        $this->assertSame(9, $items[0]->quality);
+	// 測試一般物品
+	public function testNormalProduct(): void
+	{
+		$excepted = [
+			[
+				'name' => 'box',
+				'sellIn' => -1,
+				'quality' => 0,
+			],
+			[
+				'name' => 'sword',
+				'sellIn' => 9,
+				'quality' => 29,
+			],
+			[
+				'name' => 'shoes',
+				'sellIn' => -1,
+				'quality' => 8,
+			],
+		];
+	    $gildedRose = new GildedRose([
+		    new Item('box', 0, 0),
+		    new Item('sword', 10, 30),
+		    new Item('shoes', 0, 10),
+	    ]);
+	    $items = $gildedRose->updateQuality();
+		foreach ($excepted as $index => $exceptedItem) {
+			$this->testPattern($exceptedItem, $items[$index]);
+		}
     }
+	// 測試奶酪
+	public function testAgedBrie(): void
+	{
+		$name = 'Aged Brie';
+		$excepted = [
+			[
+				'name' => $name,
+				'sellIn' => -1,
+				'quality' => 50,
+			],
+			[
+				'name' => $name,
+				'sellIn' => -1,
+				'quality' => 2,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 9,
+				'quality' => 26,
+			],
+		];
+		$gildedRose = new GildedRose([
+			new Item($name, 0, 50),
+			new Item($name, 0, 0),
+			new Item($name, 10, 25),
+		]);
+		$items = $gildedRose->updateQuality();
+		foreach ($excepted as $index => $exceptedItem) {
+			$this->testPattern($exceptedItem, $items[$index]);
+		}
+	}
 
-    public function testUpdatesNormalItemsOnSellDate(): void
-    {
-        // arrange
-        $items = [new Item('normal', 0, 10)];
-        $app = new GildedRose($items);
+	// 測試通行證邏輯
+	public function testBackstagePasses(): void
+	{
+		$name = 'Backstage passes to a TAFKAL80ETC concert';
+		$excepted = [
+			[
+				'name' => $name,
+				'sellIn' => -1,
+				'quality' => 0,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 19,
+				'quality' => 31,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 9,
+				'quality' => 32,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 4,
+				'quality' => 33,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 19,
+				'quality' => 50,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 9,
+				'quality' => 50,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 4,
+				'quality' => 50,
+			],
+		];
+		$gildedRose = new GildedRose([
+			new Item($name, 0, 30),
+			new Item($name, 20, 30),
+			new Item($name, 10, 30),
+			new Item($name, 5, 30),
+			new Item($name, 20, 50),
+			new Item($name, 10, 49),
+			new Item($name, 5, 48),
+		]);
+		$items = $gildedRose->updateQuality();
+		foreach ($excepted as $index => $exceptedItem) {
+			$this->testPattern($exceptedItem, $items[$index]);
+		}
+	}
+	// 測試炎魔手手邏輯
+	public function testSulfuras(): void
+	{
+		$name = 'Sulfuras, Hand of Ragnaros';
+		$excepted = [
+			[
+				'name' => $name,
+				'sellIn' => -1,
+				'quality' => 80,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 9,
+				'quality' => 80,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 19,
+				'quality' => 80,
+			],
+		];
+		$gildedRose = new GildedRose([
+			new Item($name, 0, 0),
+			new Item($name, 10, 10),
+			new Item($name, 20, 1000),
+		]);
+		$items = $gildedRose->updateQuality();
+		foreach ($excepted as $index => $exceptedItem) {
+			$this->testPattern($exceptedItem, $items[$index]);
+		}
+	}
+	// 測試召喚物品邏輯
+	public function testConjured(): void
+	{
+		$name = 'Conjured';
+		$excepted = [
+			[
+				'name' => $name,
+				'sellIn' => -1,
+				'quality' => 0,
+			],
+			[
+				'name' => $name,
+				'sellIn' => -1,
+				'quality' => 6,
+			],
+			[
+				'name' => $name,
+				'sellIn' => 9,
+				'quality' => 8,
+			],
+		];
+		$gildedRose = new GildedRose([
+			new Item($name, 0, 0),
+			new Item($name, 0, 10),
+			new Item($name, 10, 10),
+		]);
+		$items = $gildedRose->updateQuality();
+		foreach ($excepted as $index => $exceptedItem) {
+			$this->testPattern($exceptedItem, $items[$index]);
+		}
+	}
 
-        // act
-        $app->updateQuality();
 
-        // assert
-        $this->assertSame(-1, $items[0]->sellIn);
-        $this->assertSame(8, $items[0]->quality);
-    }
+	// 測試髒資料
+	public function testDirtyData(): void
+	{
+		$excepted = [
+			[
+				'name' => 'box',
+				'sellIn' => -1,
+				'quality' => 0,
+			],
+			[
+				'error' => true,
+				'message' => 'ER01: item type is not object',
+			],
+			[
+				'error' => true,
+				'message' => 'ER02: item name is undefined',
+			],
+			[
+				'error' => true,
+				'message' => 'ER03: item sellIn is undefined',
+			],
+			[
+				'error' => true,
+				'message' => 'ER04: item quality is undefined',
+			],
+		];
+		$gildedRose = new GildedRose([
+			new Item('box', 0, 0),
+			[],
+			(object) [
+				'sellIn' => -1,
+				'quality' => 0,
+			],
+			(object) [
+				'name' => 'box',
+				'quality' => 0,
+			],
+			(object) [
+				'name' => 'box',
+				'sellIn' => -1,
+			],
+		]);
+		$items = $gildedRose->updateQuality();
+		foreach ($excepted as $index => $exceptedItem) {
+			$this->testPattern($exceptedItem, $items[$index]);
+		}
+	}
 
-    public function testUpdatesNormalItemsAfterSellDate(): void
-    {
-        // arrange
-        $items = [new Item('normal', -5, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(-6, $items[0]->sellIn);
-        $this->assertSame(8, $items[0]->quality);
-    }
-
-    public function testUpdatesNormalItemsWithAQualityOf0(): void
-    {
-        // arrange
-        $items = [new Item('normal', 5, 0)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(4, $items[0]->sellIn);
-        $this->assertSame(0, $items[0]->quality);
-    }
-
-    //-----------------
-    // Brie item
-    //-----------------
-    public function testUpdatesBrieItemsBeforeSellDate(): void
-    {
-        // arrange
-        $items = [new Item('Aged Brie', 5, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(4, $items[0]->sellIn);
-        $this->assertSame(11, $items[0]->quality);
-    }
-
-    public function testUpdatesBrieItemsBeforeSellDateWithMaximumQuality(): void
-    {
-        // arrange
-        $items = [new Item('Aged Brie', 5, 50)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(4, $items[0]->sellIn);
-        $this->assertSame(50, $items[0]->quality);
-    }
-
-    public function testUpdatesBrieItemsOnSellDate(): void
-    {
-        // arrange
-        $items = [new Item('Aged Brie', 0, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(-1, $items[0]->sellIn);
-        $this->assertSame(12, $items[0]->quality);
-    }
-
-    public function testUpdatesBrieItemsOnSellDateNearMaximumQuality(): void
-    {
-        // arrange
-        $items = [new Item('Aged Brie', 0, 49)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(-1, $items[0]->sellIn);
-        $this->assertSame(50, $items[0]->quality);
-    }
-
-    public function testUpdatesBrieItemsOnSellDateWithMaximumQuality(): void
-    {
-        // arrange
-        $items = [new Item('Aged Brie', 0, 50)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(-1, $items[0]->sellIn);
-        $this->assertSame(50, $items[0]->quality);
-    }
-
-    public function testUpdatesBrieItemsAfterSellDate(): void
-    {
-        // arrange
-        $items = [new Item('Aged Brie', -10, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(-11, $items[0]->sellIn);
-        $this->assertSame(12, $items[0]->quality);
-    }
-
-    public function testUpdatesBrieItemsAfterSellDateWithMaximumQuality(): void
-    {
-        // arrange
-        $items = [new Item('Aged Brie', -10, 50)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(-11, $items[0]->sellIn);
-        $this->assertSame(50, $items[0]->quality);
-    }
-
-    //-----------------
-    // Sulfuras item
-    //-----------------
-    public function testUpdatesSulfurasItemsBeforeSellDate(): void
-    {
-        // arrange
-        $items = [new Item('Sulfuras, Hand of Ragnaros', 5, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(5, $items[0]->sellIn);
-        $this->assertSame(10, $items[0]->quality);
-    }
-
-    public function testUpdatesSulfurasItemsOnSellDate(): void
-    {
-        // arrange
-        $items = [new Item('Sulfuras, Hand of Ragnaros', 0, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(0, $items[0]->sellIn);
-        $this->assertSame(10, $items[0]->quality);
-    }
-
-    public function testUpdatesSulfurasItemsAfterSellDate(): void
-    {
-        // arrange
-        $items = [new Item('Sulfuras, Hand of Ragnaros', -1, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(-1, $items[0]->sellIn);
-        $this->assertSame(10, $items[0]->quality);
-    }
-
-    //-----------------
-    // Backstage Pass
-    //-----------------
-    public function testUpdatesBackstagePassItemsLongBeforeSellDate(): void
-    {
-        // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 11, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(10, $items[0]->sellIn);
-        $this->assertSame(11, $items[0]->quality);
-    }
-
-    public function testUpdatesBackstagePassItemsCloseToBeforeSellDate(): void
-    {
-        // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 10, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(9, $items[0]->sellIn);
-        $this->assertSame(12, $items[0]->quality);
-    }
-
-    public function testUpdatesBackstagePassItemsCloseToSellDateAtMaximumQuality(): void
-    {
-        // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 10, 50)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(9, $items[0]->sellIn);
-        $this->assertSame(50, $items[0]->quality);
-    }
-
-    public function testUpdatesBackstagePassItemsVeryCloseToSellDate(): void
-    {
-        // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 5, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(4, $items[0]->sellIn);
-        $this->assertSame(13, $items[0]->quality);
-    }
-
-    public function testUpdatesBackstagePassItemsVeryCloseToSellDateAtMaxiumQuality(): void
-    {
-        // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 5, 50)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(4, $items[0]->sellIn);
-        $this->assertSame(50, $items[0]->quality);
-    }
-
-    public function testUpdatesBackstagePassItemsWithOneDayLeftToSellDateAtMaxiumQuality(): void
-    {
-        // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 1, 50)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(0, $items[0]->sellIn);
-        $this->assertSame(50, $items[0]->quality);
-    }
-
-    public function testUpdatesBackstagePassItemsOnSellDate(): void
-    {
-        // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 0, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(-1, $items[0]->sellIn);
-        $this->assertSame(0, $items[0]->quality);
-    }
-
-    public function testUpdatesBackstagePassItemsAfterSellDate(): void
-    {
-        // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', -1, 10)];
-        $app = new GildedRose($items);
-
-        // act
-        $app->updateQuality();
-
-        // assert
-        $this->assertSame(-2, $items[0]->sellIn);
-        $this->assertSame(0, $items[0]->quality);
-    }
+	private function testPattern(array $exceptedItem, $item): void
+	{
+		if (isset($exceptedItem['error'])) {
+			$this->assertSame($exceptedItem, $item);
+		} else {
+			$this->assertSame($exceptedItem['name'], $item->name);
+			$this->assertSame($exceptedItem['sellIn'], $item->sellIn);
+			$this->assertSame($exceptedItem['quality'], $item->quality);
+		}
+	}
 }
