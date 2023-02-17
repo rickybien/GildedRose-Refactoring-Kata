@@ -15,10 +15,18 @@ final class GildedRose
     {
         $this->items = $items;
     }
-	
+
 	public function updateQuality(): array
 	{
 		foreach ($this->items as &$item) {
+			$validate = $this->validateData($item);
+			if (!$validate['result']) {
+				$item = [
+					'error' => true,
+					'message' => $validate['message'],
+				];
+				continue;
+			}
 			// 時間老人工作中
 			$item->sellIn = $item->sellIn - 1;
 			$item = $this->process($item);
@@ -82,5 +90,30 @@ final class GildedRose
 	private function minusQuality(int $quality, int $minusNumber): int
 	{
 		return $quality - $minusNumber > 0 ? $quality - $minusNumber : 0;
+	}
+
+	private function validateData($item): array
+	{
+		try {
+			if (!is_object($item)) {
+				throw new \Exception('ER01: item type is not object');
+			} else if(!isset($item->name)) {
+				throw new \Exception('ER02: item name is undefined');
+			} else if(!isset($item->sellIn)) {
+				throw new \Exception('ER02: item sellIn is undefined');
+			} else if(!isset($item->quality)) {
+				throw new \Exception('ER02: item quality is undefined');
+			}
+		} catch (\Exception $exception) {
+			return [
+				'result' => false,
+				'message' => $exception->getMessage(),
+			];
+		}
+
+		return [
+			'result' => true,
+			'message' => '',
+		];
 	}
 }
