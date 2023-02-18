@@ -45,7 +45,7 @@ class GildedRose
                 if ($item->name != 'Aged Brie') {
                     if ($item->name != 'Backstage passes to a TAFKAL80ETC concert') {
                         $item->quality --;
-                        if($item->name == 'Conjured') {
+                        if($item->name == 'Conjured') { // 'Conjured' degrades twice as fast as normal items
                             $item->quality --;
                         }
                     } else {
