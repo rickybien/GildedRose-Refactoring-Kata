@@ -38,13 +38,7 @@ final class GildedRose
                         $item->quality = 0;
                         break;
                     }
-                    $item->quality += 1;
-                    if ($item->sellIn < 10) {
-                        $item->quality += 1;
-                    }
-                    if ($item->sellIn < 5) {
-                        $item->quality += 1;
-                    }
+                    $item->quality += $this->getBackStagePassIncreasingQuality($item);
                     break;
                 case 'Conjured':
                     $item = $this->updateNormalItemQuality($item, 2);
@@ -69,5 +63,17 @@ final class GildedRose
         $item->quality -= (1 * $times);
 
         return $item;
+    }
+
+    private function getBackStagePassIncreasingQuality(mixed $item): int
+    {
+        if ($item->sellIn < 5) {
+            return 3;
+        }
+        if ($item->sellIn < 10) {
+            return 2;
+        }
+
+        return 1;
     }
 }
