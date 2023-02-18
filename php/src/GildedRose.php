@@ -46,17 +46,28 @@ final class GildedRose
                         $item->quality += 1;
                     }
                     break;
+                case 'Conjured':
+                    $item = $this->updateNormalItemQuality($item, 2);
+                    break;
                 default:
-                    if ($item->sellIn < 0) {
-                        $item->quality -= 2;
-                    } else {
-                        $item->quality -= 1;
-                    }
+                    $item = $this->updateNormalItemQuality($item);
                     break;
             }
 
             $item->quality = max($item->quality, 0);
             $item->quality = min($item->quality, 50);
         }
+    }
+
+    private function updateNormalItemQuality($item, int $times = 1)
+    {
+        if ($item->sellIn < 0) {
+            $item->quality -= (2 * $times);
+
+            return $item;
+        }
+        $item->quality -= (1 * $times);
+
+        return $item;
     }
 }
