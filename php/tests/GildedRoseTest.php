@@ -184,7 +184,7 @@ class GildedRoseTest extends TestCase
 
         // assert
         $this->assertSame(5, $items[0]->sellIn);
-        $this->assertSame(10, $items[0]->quality);
+        $this->assertSame(80, $items[0]->quality);
     }
 
     public function testUpdatesSulfurasItemsOnSellDate(): void
@@ -198,7 +198,7 @@ class GildedRoseTest extends TestCase
 
         // assert
         $this->assertSame(0, $items[0]->sellIn);
-        $this->assertSame(10, $items[0]->quality);
+        $this->assertSame(80, $items[0]->quality);
     }
 
     public function testUpdatesSulfurasItemsAfterSellDate(): void
@@ -212,7 +212,7 @@ class GildedRoseTest extends TestCase
 
         // assert
         $this->assertSame(-1, $items[0]->sellIn);
-        $this->assertSame(10, $items[0]->quality);
+        $this->assertSame(80, $items[0]->quality);
     }
 
     //-----------------
