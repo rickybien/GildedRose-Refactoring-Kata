@@ -6,8 +6,16 @@ class GildedRose(var items: Array<Item>) {
         for (i in items.indices) {
             if (items[i].name != "Aged Brie" && items[i].name != "Backstage passes to a TAFKAL80ETC concert") {
                 if (items[i].quality > 0) {
-                    if (items[i].name != "Sulfuras, Hand of Ragnaros") {
-                        items[i].quality = items[i].quality - 1
+                    when {
+                        items[i].name == "Conjured Mana Cake" -> {
+                            val newQuality = items[i].quality - 2
+                            items[i].quality = if (newQuality < 0) 0 else newQuality
+                        }
+                        items[i].name != "Sulfuras, Hand of Ragnaros" -> {
+                            items[i].quality = items[i].quality - 1
+                        }
+                        else -> {
+                        }
                     }
                 }
             } else {
@@ -38,8 +46,14 @@ class GildedRose(var items: Array<Item>) {
                 if (items[i].name != "Aged Brie") {
                     if (items[i].name != "Backstage passes to a TAFKAL80ETC concert") {
                         if (items[i].quality > 0) {
-                            if (items[i].name != "Sulfuras, Hand of Ragnaros") {
-                                items[i].quality = items[i].quality - 1
+                            when {
+                                items[i].name == "Conjured Mana Cake" -> {
+                                    val newQuality = items[i].quality - 2
+                                    items[i].quality = if (newQuality < 0) 0 else newQuality
+                                }
+                                items[i].name != "Sulfuras, Hand of Ragnaros" -> {
+                                    items[i].quality = items[i].quality - 1
+                                }
                             }
                         }
                     } else {
