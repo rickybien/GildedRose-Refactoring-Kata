@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace GildedRose;
 
-// 物品名 陳年布利奶酪
 define('HIGHEST_QUALITY', 50);
 define('ITEM_NAME_CHEESE', 'Aged Brie');
 define('ITEM_NAME_PASSES', 'Backstage passes to a TAFKAL80ETC concert');
 define('ITEM_NAME_SULFURAS', 'Sulfuras, Hand of Ragnaros');
+define('ITEM_NAME_CONJURED', 'Conjured');
 define('PASSES_CLOSE_TO_SELL_DATE', 10);
 define('PASSES_VERY_CLOSE_TO_SELL_DATE', 5);
 
@@ -47,18 +47,28 @@ final class GildedRose
                 //	当还剩5天或更少的时候，品质`Quality`每天提高3；
                 //  但一旦过期，品质就会降为0
                 case ITEM_NAME_PASSES:
-                    if ($item->sellIn > PASSES_CLOSE_TO_SELL_DATE) {
-                        $this->increaseQuality($item, 1);
-                    } elseif ($item->sellIn <= PASSES_VERY_CLOSE_TO_SELL_DATE) {
-                        $this->increaseQuality($item, 3);
-                    } else {
-                        $this->increaseQuality($item, 2);
+                    $increaseQualityNum = 1;
+                    if ($item->sellIn <= PASSES_CLOSE_TO_SELL_DATE) {
+                        $increaseQualityNum = 2;
                     }
+                    if ($item->sellIn <= PASSES_VERY_CLOSE_TO_SELL_DATE) {
+                        $increaseQualityNum = 3;
+                    }
+                    $this->increaseQuality($item, $increaseQualityNum);
                     $this->decreaseSellIn($item);
                     if ($item->sellIn < 0) {
                         $item->quality = 0;
                         break;
                     }
+                    break;
+
+                // "Conjured"（召唤物品）的品质`Quality`下降速度比正常物品快一倍
+                // 減銷售期限，降低品質
+                // 一旦销售期限过期，品质`Quality`会以四倍速度加速下降
+                case ITEM_NAME_CONJURED:
+                    $this->decreaseSellIn($item);
+                    $decreaseQualityNum = $item->sellIn < 0 ? 4 : 2;
+                    $this->decreaseQuality($item, $decreaseQualityNum);
                     break;
 
                 // 一般 item
