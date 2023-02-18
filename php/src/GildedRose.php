@@ -24,6 +24,10 @@ final class GildedRose
                     if ($item->name != 'Sulfuras, Hand of Ragnaros') {
                         $item->quality = $item->quality - 1;
                     }
+
+                    if ($item->name === 'Conjured') {
+                        $item->quality = $item->quality - 1;
+                    }
                 }
             } else {
                 if ($item->quality < 50) {
@@ -55,7 +59,12 @@ final class GildedRose
                                 $item->quality = $item->quality - 1;
                             }
                         }
-                    } else {
+
+                        if ($item->name === 'Conjured') {
+                            $item->quality = $item->quality - 1;
+                        }
+                    }
+                    else {
                         $item->quality = $item->quality - $item->quality;
                     }
                 } else {
