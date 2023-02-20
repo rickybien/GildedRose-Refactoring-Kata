@@ -21,11 +21,19 @@ namespace csharp
             // `Quality` 永远不会为负值 && 永远不会超过50
             if (quality <= _minQuality && quality >= _maxQuality)
                 return quality;
-            
-            // 例外處理："Backstage passes"（后台通行证）与"Aged Brie"（陈年布利奶酪）类似，其品质`Quality`会随着时间推移而提高
-            if (item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert")
+
+            int vibrantValue = 1; // 震盪數值
+            if (item.SellIn <= 0) // 一旦销售期限过期，品质`Quality`会以双倍速度加速增加 or 下降
+                vibrantValue *= 2;
+
+            // Special Case 
+            if (item.Name == "Aged Brie")  // "Aged Brie"（陈年布利奶酪）的品质`Quality`会随着时间推移而提高
             {
-                if (item.SellIn > 10 )
+                quality += vibrantValue;
+            }
+            else if (item.Name == "Backstage passes to a TAFKAL80ETC concert") // "Backstage passes"（后台通行证）与"Aged Brie"（陈年布利奶酪）类似，其品质`Quality`会随着时间推移而提高
+            {
+                if (item.SellIn > 10)
                     quality += 1;
                 //当还剩10天或更少的时候，品质`Quality`每天提高2
                 else if (item.SellIn <= 10 && item.SellIn > 5)
@@ -37,15 +45,16 @@ namespace csharp
                 else if (item.SellIn <= 0)
                     quality = 0;
             }
-            //"Conjured"（召唤物品）的品质`Quality`下降速度比正常物品快一倍
-            else if ( item.Name == "Conjured Mana Cake")
+            // Common Case
+            else
             {
-                quality -= 2;
+                if (item.Name == "Conjured Mana Cake") //"Conjured"（召唤物品）的品质`Quality`下降速度比正常物品快一倍
+                    vibrantValue *= 2;
+
+                quality -= vibrantValue;
             }
-            else // Common Case
-            {
-                quality -= 1;
-            }
+
+
 
             // `Quality` 永远不会为负值 
             if (quality <= _minQuality)
