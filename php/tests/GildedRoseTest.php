@@ -215,6 +215,20 @@ class GildedRoseTest extends TestCase
         $this->assertSame(10, $items[0]->quality);
     }
 
+    public function testUpdatesSulfurasQualityWith80(): void
+    {
+        // arrange
+        $items = [new Item('Sulfuras, Hand of Ragnaros', 5, 80)];
+        $app = new GildedRose($items);
+
+        // act
+        $app->updateQuality();
+
+        // assert
+        $this->assertSame(5, $items[0]->sellIn);
+        $this->assertSame(80, $items[0]->quality);
+    }
+
     //-----------------
     // Backstage Pass
     //-----------------
