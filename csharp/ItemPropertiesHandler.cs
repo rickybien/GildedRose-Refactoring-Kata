@@ -1,86 +1,37 @@
 ﻿using System;
+using csharp.ItemModels;
+using System.Collections.Generic;
+
 namespace csharp
 {
-	public class ItemPropertiesHandler
-	{
-        private readonly int _minQuality = 0;
-        private readonly int _maxQuality = 50;
+    public class ItemPropertiesHandler
+    {
+        private Item _item;
+        private Dictionary<string, Common> _itemMappingList;
 
-        public int QualityUpdate(Item item)
-		{
-            int quality = item.Quality;
-
-            // Special Case
-            if (item.Name == "Sulfuras, Hand of Ragnaros") // 传奇物品"Sulfuras"（萨弗拉斯—炎魔拉格纳罗斯之手）永不过期，也不会降低品质`Quality`
+        public ItemPropertiesHandler(Item item)
+        {
+            _item = item;
+            _itemMappingList = new Dictionary<string, Common>()
             {
-                // 每种物品的品质不会超过50，然而"Sulfuras"（萨弗拉斯—炎魔拉格纳罗斯之手）是一个传奇物品，因此它的品质是80且永远不变。
-                quality = 80;
-                return quality;
-            }
-
-            // `Quality` 永远不会为负值 && 永远不会超过50
-            if (quality <= _minQuality && quality >= _maxQuality)
-                return quality;
-
-            int vibrantValue = 1; // 震盪數值
-            if (item.SellIn <= 0) // 一旦销售期限过期，品质`Quality`会以双倍速度加速增加 or 下降
-                vibrantValue *= 2;
-
-            // Special Case 
-            if (item.Name == "Aged Brie")  // "Aged Brie"（陈年布利奶酪）的品质`Quality`会随着时间推移而提高
-            {
-                quality += vibrantValue;
-            }
-            else if (item.Name == "Backstage passes to a TAFKAL80ETC concert") // "Backstage passes"（后台通行证）与"Aged Brie"（陈年布利奶酪）类似，其品质`Quality`会随着时间推移而提高
-            {
-                if (item.SellIn > 10)
-                    quality += 1;
-                //当还剩10天或更少的时候，品质`Quality`每天提高2
-                else if (item.SellIn <= 10 && item.SellIn > 5)
-                    quality += 2;
-                //当还剩5天或更少的时候，品质`Quality`每天提高3；
-                else if (item.SellIn <= 5 && item.SellIn > 0)
-                    quality += 3;
-                //  但一旦过期，品质就会降为0 ，或是 在剩0天的狀況，隔天就會過期
-                else if (item.SellIn <= 0)
-                    quality = 0;
-            }
-            // Common Case
-            else
-            {
-                if (item.Name == "Conjured Mana Cake") //"Conjured"（召唤物品）的品质`Quality`下降速度比正常物品快一倍
-                    vibrantValue *= 2;
-
-                quality -= vibrantValue;
-            }
-
-
-
-            // `Quality` 永远不会为负值 
-            if (quality <= _minQuality)
-                return _minQuality;
-
-            // `Quality` 永远不会超过50 
-            if (quality >= _maxQuality)
-                return _maxQuality;
-
-            return quality;
+                { "Sulfuras, Hand of Ragnaros", new Sulfuras(item) },
+                { "Aged Brie",  new AgedBrie(item) },
+                {"Backstage passes to a TAFKAL80ETC concert",  new BackstagePasses(item) },
+                {"Conjured Mana Cake", new Conjured(item) }
+            };
         }
 
-        public int SellInUpdate(Item item)
+        public void UpdateProperties()
         {
-            int sellIn = item.SellIn;
-
-            // Special Case
-            if (item.Name == "Sulfuras, Hand of Ragnaros") // 传奇物品"Sulfuras"（萨弗拉斯—炎魔拉格纳罗斯之手）永不过期
+            if (_itemMappingList.ContainsKey(_item.Name))
             {
-                return sellIn;
+                _itemMappingList[_item.Name].UpdateProperties();
             }
-
-            // Common Case
-            sellIn--; // 每天结束时，系统会降低每种物品的这个数值
-
-            return sellIn;
+            else // Normal Case
+            {
+                Common common = new Common(_item);
+                common.UpdateProperties();
+            }
         }
     }
 }
