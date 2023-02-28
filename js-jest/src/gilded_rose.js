@@ -19,6 +19,9 @@ class Shop {
           if (itemName != 'Sulfuras, Hand of Ragnaros') {
             quality = quality - 1;
           }
+          if (itemName == 'Conjured'){
+            quality = quality - 1;
+          }
         }
       } else {
         if (quality < 50) {
@@ -44,6 +47,9 @@ class Shop {
           if (itemName != 'Backstage passes to a TAFKAL80ETC concert') {
             if (quality > 0) {
               if (itemName != 'Sulfuras, Hand of Ragnaros') {
+                quality = quality - 1;
+              }
+              if (itemName == 'Conjured'){
                 quality = quality - 1;
               }
             }
