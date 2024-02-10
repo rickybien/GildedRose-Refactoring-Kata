@@ -274,7 +274,7 @@ class GildedRoseTest extends TestCase
         $this->assertSame(13, $items[0]->quality);
     }
 
-    public function testUpdatesBackstagePassItemsVeryCloseToSellDateAtMaxiumQuality(): void
+    public function testUpdatesBackstagePassItemsVeryCloseToSellDateAtMaximumQuality(): void
     {
         // arrange
         $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 5, 50)];
@@ -288,7 +288,7 @@ class GildedRoseTest extends TestCase
         $this->assertSame(50, $items[0]->quality);
     }
 
-    public function testUpdatesBackstagePassItemsWithOneDayLeftToSellDateAtMaxiumQuality(): void
+    public function testUpdatesBackstagePassItemsWithOneDayLeftToSellDateAtMaximumQuality(): void
     {
         // arrange
         $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 1, 50)];
