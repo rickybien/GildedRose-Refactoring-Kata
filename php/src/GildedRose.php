@@ -24,6 +24,7 @@ final readonly class GildedRose
             'normal' => new NormalItem($item),
             'Aged Brie' => new AgedBrieItem($item),
             'Backstage passes to a TAFKAL80ETC concert' => new BackstageItem($item),
+            'Conjured' => new Conjured($item),
             default => new BaseItem($item),
         };
     }
