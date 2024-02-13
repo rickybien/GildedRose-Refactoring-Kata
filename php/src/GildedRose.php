@@ -28,6 +28,11 @@ final readonly class GildedRose
                 $sulfurasItem->updateQuality();
                 return;
             }
+            if ($item->name === 'Backstage passes to a TAFKAL80ETC concert') {
+                $backstageItem = new BackstageItem($item);
+                $backstageItem->updateQuality();
+                return;
+            }
             if ($item->name !== 'Aged Brie' && $item->name !== 'Backstage passes to a TAFKAL80ETC concert') {
                 if (($item->quality > 0) && $item->name !== 'Sulfuras, Hand of Ragnaros') {
                     $item->quality -= 1;
