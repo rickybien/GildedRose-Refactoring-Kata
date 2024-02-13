@@ -18,6 +18,11 @@ final readonly class GildedRose
                 $normalItem->updateQuality();
                 return;
             }
+            if ($item->name === 'Aged Brie') {
+                $agedBrieItem = new AgedBrieItem($item);
+                $agedBrieItem->updateQuality();
+                return;
+            }
             if ($item->name !== 'Aged Brie' && $item->name !== 'Backstage passes to a TAFKAL80ETC concert') {
                 if (($item->quality > 0) && $item->name !== 'Sulfuras, Hand of Ragnaros') {
                     $item->quality -= 1;
