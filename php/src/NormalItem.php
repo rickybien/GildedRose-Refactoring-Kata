@@ -10,15 +10,15 @@ readonly class NormalItem
 
     public function updateQuality(): void
     {
-        if ($this->item->quality > 0) {
-            if ($this->item->sellIn > 0) {
-                $this->item->quality -= 1;
-            }
-            if ($this->item->sellIn <= 0) {
-                $this->item->quality -= 2;
-            }
+        $this->item->sellIn -= 1;
+
+        if ($this->item->quality === 0) {
+            return;
         }
 
-        $this->item->sellIn -= 1;
+        $this->item->quality -= 1;
+        if ($this->item->sellIn <= 0) {
+            $this->item->quality -= 1;
+        }
     }
 }
