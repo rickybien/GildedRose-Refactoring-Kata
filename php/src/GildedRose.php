@@ -13,6 +13,11 @@ final readonly class GildedRose
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
+            if ($item->name === 'normal') {
+                $normalItem = new NormalItem($item);
+                $normalItem->updateQuality();
+                return;
+            }
             if ($item->name !== 'Aged Brie' && $item->name !== 'Backstage passes to a TAFKAL80ETC concert') {
                 if (($item->quality > 0) && $item->name !== 'Sulfuras, Hand of Ragnaros') {
                     $item->quality -= 1;
