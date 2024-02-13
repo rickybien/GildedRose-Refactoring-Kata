@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace GildedRose;
 
-final class GildedRose
+final readonly class GildedRose
 {
-    public function __construct(private readonly array $items)
+    public function __construct(private array $items)
     {
     }
 
@@ -20,23 +20,23 @@ final class GildedRose
             } elseif ($item->quality < 50) {
                 $item->quality += 1;
                 if ($item->name === 'Backstage passes to a TAFKAL80ETC concert') {
-                    if (($item->sellIn < 11) && $item->quality < 50) {
+                    if ($item->sellIn < 11) {
                         $item->quality += 1;
                     }
-                    if (($item->sellIn < 6) && $item->quality < 50) {
+                    if ($item->sellIn < 6) {
                         $item->quality += 1;
                     }
                 }
             }
 
             if ($item->name !== 'Sulfuras, Hand of Ragnaros') {
-                $item->sellIn = $item->sellIn - 1;
+                $item->sellIn -= 1;
             }
 
             if ($item->sellIn < 0) {
                 if ($item->name !== 'Aged Brie') {
                     if ($item->name !== 'Backstage passes to a TAFKAL80ETC concert') {
-                        if (($item->quality > 0) && $item->name !== 'Sulfuras, Hand of Ragnaros') {
+                        if ($item->name !== 'Sulfuras, Hand of Ragnaros') {
                             $item->quality -= 1;
                         }
                     } else {
