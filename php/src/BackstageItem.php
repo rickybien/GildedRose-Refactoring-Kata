@@ -2,12 +2,8 @@
 
 namespace GildedRose;
 
-readonly class BackstageItem implements QualityInterface
+readonly class BackstageItem extends BaseItem
 {
-    public function __construct(private Item $item)
-    {
-    }
-
     public function updateQuality(): void
     {
         $this->item->sellIn -= 1;

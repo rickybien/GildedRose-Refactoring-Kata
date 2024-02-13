@@ -18,13 +18,13 @@ final readonly class GildedRose
         }
     }
 
-    private function transfer(Item $item): QualityInterface
+    private function transfer(Item $item): BaseItem
     {
         return match ($item->name) {
             'normal' => new NormalItem($item),
             'Aged Brie' => new AgedBrieItem($item),
-            'Sulfuras, Hand of Ragnaros' => new SulfurasItem($item),
             'Backstage passes to a TAFKAL80ETC concert' => new BackstageItem($item),
+            default => new BaseItem($item),
         };
     }
 }

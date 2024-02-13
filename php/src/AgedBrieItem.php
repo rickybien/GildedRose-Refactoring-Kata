@@ -2,12 +2,8 @@
 
 namespace GildedRose;
 
-readonly class AgedBrieItem implements QualityInterface
+readonly class AgedBrieItem extends BaseItem
 {
-    public function __construct(private Item $item)
-    {
-    }
-
     public function updateQuality(): void
     {
         $this->item->sellIn -= 1;
