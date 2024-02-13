@@ -2,7 +2,7 @@
 
 namespace GildedRose;
 
-readonly class NormalItem
+readonly class NormalItem implements QualityInterface
 {
     public function __construct(private Item $item)
     {

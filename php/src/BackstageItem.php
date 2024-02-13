@@ -2,7 +2,7 @@
 
 namespace GildedRose;
 
-readonly class BackstageItem
+readonly class BackstageItem implements QualityInterface
 {
     public function __construct(private Item $item)
     {

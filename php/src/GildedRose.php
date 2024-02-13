@@ -13,30 +13,18 @@ final readonly class GildedRose
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            if ($item->name === 'normal') {
-                $normalItem = new NormalItem($item);
-                $normalItem->updateQuality();
-
-                return;
-            }
-            if ($item->name === 'Aged Brie') {
-                $agedBrieItem = new AgedBrieItem($item);
-                $agedBrieItem->updateQuality();
-
-                return;
-            }
-            if ($item->name === 'Sulfuras, Hand of Ragnaros') {
-                $sulfurasItem = new SulfurasItem($item);
-                $sulfurasItem->updateQuality();
-
-                return;
-            }
-            if ($item->name === 'Backstage passes to a TAFKAL80ETC concert') {
-                $backstageItem = new BackstageItem($item);
-                $backstageItem->updateQuality();
-
-                return;
-            }
+            $computer = $this->transfer($item);
+            $computer->updateQuality();
         }
+    }
+
+    private function transfer(Item $item): QualityInterface
+    {
+        return match ($item->name) {
+            'normal' => new NormalItem($item),
+            'Aged Brie' => new AgedBrieItem($item),
+            'Sulfuras, Hand of Ragnaros' => new SulfurasItem($item),
+            'Backstage passes to a TAFKAL80ETC concert' => new BackstageItem($item),
+        };
     }
 }

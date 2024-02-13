@@ -2,7 +2,7 @@
 
 namespace GildedRose;
 
-readonly class AgedBrieItem
+readonly class AgedBrieItem implements QualityInterface
 {
     public function __construct(private Item $item)
     {
