@@ -79,6 +79,57 @@ class ItemHandler extends Item{
     return this;
   }
 }
+
+class Normal extends ItemHandler {
+  constructor(sellIn: number, quality: number) {
+    super(ItemType.Normal, sellIn, quality);
+  }
+
+  updateQuality() {
+    return super.updateQuality()
+  }
+}
+
+class AgedBrie extends ItemHandler {
+  constructor(sellIn: number, quality: number) {
+    super(ItemType.AgedBrie, sellIn, quality);
+  }
+
+  updateQuality() {
+    return super.updateQuality()
+  }
+}
+
+class Sulfuras extends ItemHandler {
+  constructor(sellIn: number, quality: number) {
+    super(ItemType.Sulfuras, sellIn, quality);
+  }
+
+  updateQuality() {
+    return super.updateQuality()
+  }
+}
+
+class Backstage extends ItemHandler {
+  constructor(sellIn: number, quality: number) {
+    super(ItemType.Backstage, sellIn, quality);
+  }
+
+  updateQuality() {
+    return super.updateQuality()
+  }
+}
+
+class Conjured extends ItemHandler {
+  constructor(sellIn: number, quality: number) {
+    super(ItemType.Conjured, sellIn, quality);
+  }
+
+  updateQuality() {
+    return super.updateQuality()
+  }
+}
+
 export class GildedRose {
   items: Array<Item>;
 
