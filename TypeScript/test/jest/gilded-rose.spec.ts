@@ -109,7 +109,7 @@ describe("Backstage Pass", function () {
     const gildedRose = new GildedRose([new Item("Backstage passes to a TAFKAL80ETC concert", 11, 10)]);
     const items = gildedRose.updateQuality();
     expect(items[0].sellIn).toBe(10);
-    expect(items[0].quality).toBe(11);
+    expect(items[0].quality).toBe(12);
   });
 
   it("close to before sell date", function() {
@@ -160,4 +160,38 @@ describe("Backstage Pass", function () {
     expect(items[0].sellIn).toBe(-2);
     expect(items[0].quality).toBe(0);
   });
+});
+
+describe("Conjured Item", function () {
+  it("on sell date", function() {
+    const gildedRose = new GildedRose([new Item("Conjured", 5, 10)]);
+    const items = gildedRose.updateQuality();
+
+    expect(items[0].sellIn).toBe(4);
+    expect(items[0].quality).toBe(8);
+  })
+
+  it("on sell date with minimum quality", function() {
+    const gildedRose = new GildedRose([new Item("Conjured", 5, 0)]);
+    const items = gildedRose.updateQuality();
+
+    expect(items[0].sellIn).toBe(4);
+    expect(items[0].quality).toBe(0);
+  })
+
+  it("after sell date", function() { 
+    const gildedRose = new GildedRose([new Item("Conjured", 0, 10)]);
+    const items = gildedRose.updateQuality();
+
+    expect(items[0].sellIn).toBe(-1);
+    expect(items[0].quality).toBe(6);
+  })
+
+  it("after sell date with near minimum quality", function() {
+    const gildedRose = new GildedRose([new Item("Conjured", 0, 2)]);
+    const items = gildedRose.updateQuality();
+
+    expect(items[0].sellIn).toBe(-1);
+    expect(items[0].quality).toBe(0);
+  })
 });

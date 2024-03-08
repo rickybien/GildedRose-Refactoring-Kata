@@ -17,50 +17,51 @@ export class GildedRose {
     this.items = items;
   }
 
+  private checkItemQualityMaximized(item: Item): boolean { 
+    return item.quality >= 50;
+  }
+  private checkItemQualityMinimized(item: Item): boolean {
+    return item.quality <= 0;
+  }
+
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1
-          }
-        }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-          }
-        }
-      }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1
-              }
-            }
+      if (this.items[i].name == 'Sulfuras, Hand of Ragnaros') continue;
+
+      this.items[i].sellIn -= 1;
+      const isSellInLessThanZero = this.items[i].sellIn < 0
+
+      switch (this.items[i].name) {
+        case 'Aged Brie':
+          this.items[i].quality += isSellInLessThanZero ? 2 : 1;
+          break;
+        case 'Backstage passes to a TAFKAL80ETC concert':
+          if (isSellInLessThanZero) {
+            this.items[i].quality = 0;
           } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
+            this.items[i].quality += 1;
+            
+            if (this.items[i].sellIn < 11) {
+              this.items[i].quality += 1;
+            }
+            if (this.items[i].sellIn < 6) { 
+              this.items[i].quality += 1;
+            }
           }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
-          }
-        }
+          break;
+        case 'Conjured':
+          this.items[i].quality -= isSellInLessThanZero ? 4 : 2;
+          break;
+        default:
+          this.items[i].quality -= isSellInLessThanZero ? 2 : 1
+      }
+
+
+      if (this.checkItemQualityMaximized(this.items[i])) {
+        this.items[i].quality = 50;
+      }
+      if (this.checkItemQualityMinimized(this.items[i])) {
+        this.items[i].quality = 0;
       }
     }
 
