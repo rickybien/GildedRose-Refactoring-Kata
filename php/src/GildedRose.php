@@ -26,7 +26,9 @@ final class GildedRose
         foreach ($this->items as $item) {
             $dailyFresh = DailyFreshFactory::createDailyFresh($item->name);
             $info = $this->getDailyRefreshInfo($dailyFresh, $item);
-            $item->quality = $this->maxQualityRestrict($info->quality, $item->name);
+            $quality = $this->maxQualityRestrict($info->quality, $item->name);
+            $quality = $this->minQualityRestrict($quality);
+            $item->quality = $quality;
             $item->sellIn = $info->sellIn;
         }
     }
@@ -52,5 +54,10 @@ final class GildedRose
         $maxQuality = $itemName === ItemName::HandofRagnaros->value ? 80 : 50;
 
         return min($quality, $maxQuality);
+    }
+
+    private function minQualityRestrict(int $quality): int
+    {
+        return max($quality, 0);
     }
 }
