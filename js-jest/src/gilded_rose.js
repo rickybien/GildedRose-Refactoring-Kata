@@ -37,6 +37,14 @@ class Shop {
       }
 
       // special item
+      if(name === specialItems.CONJURED) {
+        if(sellIn < 0) {
+          this.items[i].quality = clamp(quality - 4);
+        } else {
+          this.items[i].quality = clamp(quality - 2);
+        }
+      }
+
       if(name === specialItems.AGED_BRIE) {
         if(sellIn < 0) {
           this.items[i].quality = clamp(quality + 2);
