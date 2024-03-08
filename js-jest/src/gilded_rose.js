@@ -11,15 +11,15 @@ class Shop {
     this.items = items;
   }
   updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
+    for (let item of this.items) {
       let productName;
-      if(this.items[i].name.includes('Backstage passes')){
+      if(item.name.includes('Backstage passes')){
         productName = 'Backstage passes';
-      } else if(this.items[i].name.includes('Conjured')){
+      } else if(item.name.includes('Conjured')){
         productName = 'Conjured';
-      } else if(this.items[i].name.includes('Aged Brie')){
+      } else if(item.name.includes('Aged Brie')){
         productName = 'Aged Brie';
-      } else if(this.items[i].name.includes('Sulfuras')){
+      } else if(item.name.includes('Sulfuras')){
         productName = 'Sulfuras';
       } else {
         productName = 'normal';
@@ -27,47 +27,47 @@ class Shop {
 
       switch (productName) {
         case 'Aged Brie':
-          if(this.items[i].quality < 50){
-            this.items[i].quality++;
+          if(item.quality < 50){
+            item.quality++;
           }
-          this.items[i].sellIn --;
-          if(this.items[i].sellIn < 0 && this.items[i].quality < 50){
-            this.items[i].quality++;
+          item.sellIn --;
+          if(item.sellIn < 0 && item.quality < 50){
+            item.quality++;
           }
           break;
         case 'Backstage passes':
-          if(this.items[i].quality < 50){
-            this.items[i].quality++;
-            if(this.items[i].sellIn < 11) {
-              this.items[i].quality++;
+          if(item.quality < 50){
+            item.quality++;
+            if(item.sellIn < 11) {
+              item.quality++;
             }
-            if(this.items[i].sellIn < 6) {
-              this.items[i].quality++;
+            if(item.sellIn < 6) {
+              item.quality++;
             }
           }
-          this.items[i].sellIn --;
-          if(this.items[i].sellIn < 0){
-            this.items[i].quality = 0;
+          item.sellIn --;
+          if(item.sellIn < 0){
+            item.quality = 0;
           }
           break;
         case 'Sulfuras':
           break;
         case 'Conjured':
-          if (this.items[i].quality > 0) {
-            this.items[i].quality = this.items[i].quality - 2;
+          if (item.quality > 0) {
+            item.quality = item.quality - 2;
           }
-          this.items[i].sellIn--;
-          if(this.items[i].sellIn < 0 && this.items[i].quality > 0){
-            this.items[i].quality = this.items[i].quality - 2;
+          item.sellIn--;
+          if(item.sellIn < 0 && item.quality > 0){
+            item.quality = item.quality - 2;
           }
           break;
         default:
-          if (this.items[i].quality > 0) {
-            this.items[i].quality--;
+          if (item.quality > 0) {
+            item.quality--;
           }
-          this.items[i].sellIn--;
-          if (this.items[i].sellIn < 0 && this.items[i].quality > 0) {
-            this.items[i].quality--;
+          item.sellIn--;
+          if (item.sellIn < 0 && item.quality > 0) {
+            item.quality--;
           }
           break;
       }
