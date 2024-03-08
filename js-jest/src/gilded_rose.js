@@ -5,55 +5,83 @@ class Item {
     this.quality = quality;
   }
 }
+AgedGoodsWithoutTimeLimitArr = ['Aged Brie']
+AgedGoodsWithTimeLimitArr = ['Backstage passes to a TAFKAL80ETC concert']
+ImmortalGoodsArr = ['Sulfuras, Hand of Ragnaros']
 
 class Shop {
   constructor(items=[]){
     this.items = items;
   }
+
+  updateSellIn (item) {
+    item.sellIn--
+  }
+
+  updateAgedGoodsWithoutTimeLimitQuality (item) {
+    if (item.sellIn > 0) {
+      item.quality++
+    } else {
+      item.quality += 2
+    }
+    if (item.quality > 50) item.quality = 50
+  }
+
+  updateAgedGoodsWithTimeLimitQuality (item) {
+    switch (true) {
+      case item.sellIn > 10:
+        item.quality++
+        break
+      case item.sellIn > 5:
+        item.quality+= 2
+        break
+      case item.sellIn > 0:
+        item.quality+= 3
+        break
+      case item.sellIn <= 0:
+        item.quality = 0
+        break
+      default:
+        console.error(`item sellIn is not a number, sellIn: ${item.sellIn}`)
+    }
+    if (item.quality > 50) item.quality = 50
+  }
+
+  updateNormalGoodsQuality (item) {
+    if (item.sellIn > 0) item.quality--
+    else item.quality -= 2
+
+    if (item.quality < 0) item.quality = 0
+  }
+
+  updateConjuredGoodsQuality (item) {
+    this.updateNormalGoodsQuality(item)
+    this.updateNormalGoodsQuality(item)    
+  }
+
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1;
-          }
-        }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-          }
-        }
-      }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1;
-              }
-            }
-          } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality;
-          }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
-        }
+      const item = this.items[i]
+      const name = item.name
+      switch(true) {
+        case AgedGoodsWithoutTimeLimitArr.includes(name): 
+          this.updateAgedGoodsWithoutTimeLimitQuality(item)
+          this.updateSellIn(item)
+          break
+        case AgedGoodsWithTimeLimitArr.includes(name):
+          this.updateAgedGoodsWithTimeLimitQuality(item)
+          this.updateSellIn(item)
+          break
+        case ImmortalGoodsArr.includes(name):
+          break
+        case name.includes('conjured'):   // if conjured items are all started with "conjured", then the function could be changed to "startsWith".
+          this.updateConjuredGoodsQuality(item)
+          this.updateSellIn(item)
+          break
+        default:
+          this.updateNormalGoodsQuality(item)
+          this.updateSellIn(item)
+          break
       }
     }
 
