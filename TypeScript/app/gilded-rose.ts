@@ -17,6 +17,68 @@ enum ItemType {
   Backstage = 'Backstage passes to a TAFKAL80ETC concert',
   Conjured = 'Conjured Mana Cake'
 }
+
+class ItemHandler extends Item{
+  constructor(name: string, sellIn: number, quality: number) { 
+    super(name, sellIn, quality);
+  }
+
+  addQuality(count: number) {
+    this.quality += count;
+  }
+  minusQuality(count: number) { 
+    this.quality -= count;
+  }
+  minusSellIn() {
+    this.sellIn -= 1;
+  }
+  isAvailableQuality() { 
+    return this.quality > 0 && this.quality < 50;
+  }
+  isSellIn() {
+    return this.sellIn < 1;
+  }
+  updateQuality() {
+    if (this.name === ItemType.Sulfuras) return this
+
+    if (this.isSellIn() && this.isAvailableQuality()) {
+      if (this.name === ItemType.AgedBrie) {
+        this.addQuality(1);
+      } 
+      if (this.name === ItemType.Backstage) { 
+        this.minusQuality(this.quality);
+      }
+      if ([ItemType.Normal, ItemType.Conjured].includes(this.name as ItemType)) {
+        this.minusQuality(this.name === ItemType.Conjured ? 2 : 1);
+      }
+    }
+
+    if (this.isAvailableQuality()) {
+      if (this.name === ItemType.Normal) { 
+        this.minusQuality(1);
+      }
+      if (this.name === ItemType.AgedBrie) { 
+        this.addQuality(1);
+      }
+      if (this.name === ItemType.Backstage) {
+        this.addQuality(1);
+        if (this.sellIn < 11) {
+          this.addQuality(1);
+        }
+        if (this.sellIn < 6) {
+          this.addQuality(1);
+        }
+      }
+      if (this.name === ItemType.Conjured) { 
+        this.minusQuality(2);
+      }
+    }
+
+    this.minusSellIn();
+
+    return this;
+  }
+}
 export class GildedRose {
   items: Array<Item>;
 
