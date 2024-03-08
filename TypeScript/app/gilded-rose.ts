@@ -20,57 +20,47 @@ export class GildedRose {
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       if (this.items[i].name == 'Sulfuras, Hand of Ragnaros') continue
+      this.items[i].sellIn = this.items[i].sellIn - 1;
+
+      const isSellInLessThanZero = this.items[i].sellIn < 0
 
       switch (this.items[i].name) {
         case 'Aged Brie':
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
+          this.items[i].quality += isSellInLessThanZero ? 2 : 1;
+          if (this.items[i].quality > 50) {
+            this.items[i].quality = 50;
           }
           break;
         case 'Backstage passes to a TAFKAL80ETC concert':
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
+          if (isSellInLessThanZero) {
+            this.items[i].quality = 0;
+          } else {
+            if (this.items[i].quality < 50) {
+              this.items[i].quality = this.items[i].quality + 1
+              if (this.items[i].sellIn < 10) {
+                if (this.items[i].quality < 50) {
+                  this.items[i].quality = this.items[i].quality + 1
+                }
               }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
+              if (this.items[i].sellIn < 5) {
+                if (this.items[i].quality < 50) {
+                  this.items[i].quality = this.items[i].quality + 1
+                }
               }
             }
           }
           break;
-        default:
-          if (this.items[i].quality > 0) {
-            this.items[i].quality = this.items[i].quality - 1
-              if (this.items[i].name == 'Conjured' && this.items[i].quality > 0) {
-              this.items[i].quality = this.items[i].quality - 1
-            }
+        case 'Conjured':
+          this.items[i].quality -= isSellInLessThanZero ? 4 : 2;
+          if (this.items[i].quality < 0) {
+            this.items[i].quality = 0;
           }
-      }
-
-      this.items[i].sellIn = this.items[i].sellIn - 1;
-
-      if (this.items[i].sellIn < 0) {
-        switch (this.items[i].name) {
-          case 'Aged Brie':
-            if (this.items[i].quality < 50) {
-              this.items[i].quality = this.items[i].quality + 1
-            }
-            break;
-          case 'Backstage passes to a TAFKAL80ETC concert':
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
-            break;
-          default:
-            if (this.items[i].quality > 0) {
-              this.items[i].quality = this.items[i].quality - 1
-              if (this.items[i].name == 'Conjured' && this.items[i].quality > 0) {
-                this.items[i].quality = this.items[i].quality - 1
-              }
-            }
-        }
+          break;
+        default:
+          this.items[i].quality -= isSellInLessThanZero ? 2 : 1
+          if (this.items[i].quality < 0) {
+            this.items[i].quality = 0;
+          }
       }
     }
 
