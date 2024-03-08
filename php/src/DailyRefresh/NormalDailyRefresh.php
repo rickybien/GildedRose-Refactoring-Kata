@@ -6,6 +6,8 @@ namespace GildedRose\DailyRefresh;
 
 class NormalDailyRefresh implements DailyFreshInterface
 {
+    const QUALITY_DECREASE = 1;
+
     public function sellInDecrease(): int
     {
         return 1;
@@ -13,6 +15,6 @@ class NormalDailyRefresh implements DailyFreshInterface
 
     public function qualityDecrease(int $sellIn, int $quality): int
     {
-        return 1;
+        return self::QUALITY_DECREASE;
     }
 }

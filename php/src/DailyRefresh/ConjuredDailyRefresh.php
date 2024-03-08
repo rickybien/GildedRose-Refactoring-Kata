@@ -13,6 +13,6 @@ class ConjuredDailyRefresh implements DailyFreshInterface
 
     public function qualityDecrease(int $sellIn, int $quality): int
     {
-        return 2;
+        return NormalDailyRefresh::QUALITY_DECREASE * 2;
     }
 }
