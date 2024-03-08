@@ -257,3 +257,50 @@ func TestUpdatesBackstagePassItemsAfterSellDate(t *testing.T) {
 	assert.Equal(t, items[0].SellIn, -2)
 	assert.Equal(t, items[0].Quality, 0)
 }
+
+// -----------------
+// Conjured
+// -----------------
+func TestUpdatesConjuredItemsBeforeSellDate(t *testing.T) {
+	var items = []*gildedrose.Item{
+		{"Conjured", 5, 10},
+	}
+
+	gildedrose.UpdateQuality(items)
+
+	assert.Equal(t, items[0].SellIn, 4)
+	assert.Equal(t, items[0].Quality, 8)
+}
+
+func TestUpdatesConjuredItemsOnSellDate(t *testing.T) {
+	var items = []*gildedrose.Item{
+		{"Conjured", 0, 10},
+	}
+
+	gildedrose.UpdateQuality(items)
+
+	assert.Equal(t, items[0].SellIn, -1)
+	assert.Equal(t, items[0].Quality, 6)
+}
+
+func TestUpdatesConjuredItemsAfterSellDate(t *testing.T) {
+	var items = []*gildedrose.Item{
+		{"Conjured", -5, 10},
+	}
+
+	gildedrose.UpdateQuality(items)
+
+	assert.Equal(t, items[0].SellIn, -6)
+	assert.Equal(t, items[0].Quality, 6)
+}
+
+func TestUpdatesConjuredItemsWithAQualityOf0(t *testing.T) {
+	var items = []*gildedrose.Item{
+		{"Conjured", 5, 0},
+	}
+
+	gildedrose.UpdateQuality(items)
+
+	assert.Equal(t, items[0].SellIn, 4)
+	assert.Equal(t, items[0].Quality, 0)
+}
