@@ -1,4 +1,4 @@
-const {Shop, Item} = require("../src/gilded_rose");
+import { Shop, Item } from '../src/gilded_rose';
 
 describe("Normal Item", function() {
   it("before sell date", function() {
