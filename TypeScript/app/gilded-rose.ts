@@ -21,6 +21,9 @@ export class GildedRose {
     this.items = items;
   }
 
+  static normalQualityDegradeRate = 1
+  static outDateQualityDegradeRate = 2
+
   fixQuality(quality: number) {
     if (quality > qualityMaximum) {
       return qualityMaximum
@@ -55,7 +58,11 @@ export class GildedRose {
   }
 
   calcNormalQuality(nextSellIn: number, quality: number) {
-    return this.fixQuality(quality - (nextSellIn < 0 ? 2 : 1))
+    return this.fixQuality(quality - (nextSellIn < 0 ? GildedRose.outDateQualityDegradeRate : GildedRose.normalQualityDegradeRate))
+  }
+
+  calcConjuredQuality(nextSellIn: number, quality: number) {
+    return this.fixQuality(quality - 2 * (nextSellIn < 0 ? GildedRose.outDateQualityDegradeRate : GildedRose.normalQualityDegradeRate))
   }
 
   updateQuality() {
@@ -71,13 +78,17 @@ export class GildedRose {
           item.quality = this.calcBackstagePassQuality(nextSellIn, item.quality)
         case 'Sulfuras, Hand of Ragnaros':
           break
+        case 'Conjured':
+          item.sellIn = nextSellIn
+          item.quality = this.calcConjuredQuality(nextSellIn, item.quality)
+          break
         default:
           item.sellIn = nextSellIn
           item.quality = this.calcNormalQuality(nextSellIn, item.quality)
           return
       }
     })
-    
+
     return this.items;
   }
 }
