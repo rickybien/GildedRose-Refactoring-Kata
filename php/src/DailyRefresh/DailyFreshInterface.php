@@ -6,5 +6,6 @@ namespace GildedRose\DailyRefresh;
 
 interface DailyFreshInterface
 {
-
+    public function sellInDecrease(): int;
+    public function qualityDecrease($sellIn): int;
 }
