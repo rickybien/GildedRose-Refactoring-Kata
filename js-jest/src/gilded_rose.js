@@ -23,12 +23,12 @@ class Shop {
     };
   }
   updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      this.updateSellIn(this.items[i])
+    this.items.forEach((item) => {
+      this.updateSellIn(item)
 
-      const updateMethod = this.updateMethods[this.items[i].name]
-      updateMethod ? updateMethod(this.items[i]) : this.updateNormal(this.items[i])
-    }
+      const updateMethod = this.updateMethods[item.name]
+      updateMethod ? updateMethod(item) : this.updateNormal(item)
+    })
 
     return this.items;
   }
