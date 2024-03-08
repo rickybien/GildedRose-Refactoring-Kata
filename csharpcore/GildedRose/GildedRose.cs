@@ -86,20 +86,20 @@ namespace GildedRoseKata
         //         }
         //     }
         // }
-        public int UpdateNormalQty(Item NormalItem)//一般物品品質會以兩倍速度下降
+        public int UpdateNormalQty(Item NormalItem)//一般物品
         {
             
             if (NormalItem.Quality > 0)
             {
-                NormalItem.Quality = NormalItem.Quality - 2;
+                NormalItem.Quality = NormalItem.Quality - 1;
             }
-            if(!CheckSellIn(item:NormalItem))
+            if(CheckSellIn(item:NormalItem))
             {
-                return  NormalItem.Quality-1<0 ? 0 : NormalItem.Quality-1;
+                NormalItem.Quality=  NormalItem.Quality - 1;
             }
-            return NormalItem.Quality< 0 ? 0 : NormalItem.Quality;
+            return NormalItem.Quality < 0 ? 0 : NormalItem.Quality;
         }
-        public int UpdateAgedBrieQty(Item AgedBrieItem)//隨著時間推移而提高品质`Quality`
+        public int UpdateAgedBrieQty(Item AgedBrieItem)//AgeBrie
         {
             
             if (AgedBrieItem.Quality < 50)
@@ -108,13 +108,11 @@ namespace GildedRoseKata
             }
             if(CheckSellIn(AgedBrieItem))//超過期限以雙倍提高品質
             {
-                if(AgedBrieItem.Quality >= 50)
-                    return AgedBrieItem.Quality;
                 AgedBrieItem.Quality = AgedBrieItem.Quality + 1;
             }
-            return AgedBrieItem.Quality;
+            return AgedBrieItem.Quality >= 50 ? 50 : AgedBrieItem.Quality;
         }
-        public int UpdateBackstagePassesQty(Item BackstagePassesItem)//隨著時間推移而提高；還剩10天或更少的时候，品質`Quality`每天提高2；當剩5天或更少的时候，品質`Quality`每天提高3；但一旦過期，品質就會降為0
+        public int UpdateBackstagePassesQty(Item BackstagePassesItem)//BackstagePasses
         {
             
             if (BackstagePassesItem.Quality < 50)
@@ -142,38 +140,35 @@ namespace GildedRoseKata
             }
             return BackstagePassesItem.Quality;
         }
-        public int UpdateConjuredQty(Item ConjuredItem)//品質比一般正常物品快一倍
+        public int UpdateConjuredQty(Item ConjuredItem)//Conjured
         {
             
             if (ConjuredItem.Quality > 0)
             {
                 ConjuredItem.Quality = ConjuredItem.Quality - 2;
             }
-            if(!CheckSellIn(ConjuredItem))
-            {
-                return ConjuredItem.Quality;
-            }
-            else//超過期限再扣兩倍
+            if(CheckSellIn(ConjuredItem))//超過期限再扣兩倍
             {
                 ConjuredItem.Quality=ConjuredItem.Quality-2;
             }
+            
             return ConjuredItem.Quality < 0 ? 0 : ConjuredItem.Quality;
         }
         public ItemType itemType(string ItemName)
         {
-            if (ItemName == "Aged Brie")
+            if (ItemName == "Aged Brie")//隨著時間而提高品質`Quality`
             {
                 return ItemType.AgedBrie;
             }
-            else if (ItemName == "Backstage passes to a TAFKAL80ETC concert")
+            else if (ItemName == "Backstage passes to a TAFKAL80ETC concert")//隨著時間而提高；還剩10天或更少的时候，品質`Quality`每天提高2；當剩5天或更少的时候，品質`Quality`每天提高3；但一旦過期，品質就會降為0
             {
                 return ItemType.BackstagePasses;
             }
-            else if (ItemName == "Sulfuras, Hand of Ragnaros")
+            else if (ItemName == "Sulfuras, Hand of Ragnaros")//不會動，不用理他
             {
                 return ItemType.Sulfuras;
             }
-            else if (ItemName.Contains("Conjured"))
+            else if (ItemName=="Conjured")//品質比一般正常物品下降快一倍
             {
                 return ItemType.Conjured;
             }
@@ -200,7 +195,7 @@ namespace GildedRoseKata
             {
                 foreach(var item in Items)
                 {
-                    var Type=itemType(item.Name);
+                    var Type=itemType(item.Name);//先確認商品為甚麼型別
                     switch(Type)
                     {
                         case ItemType.AgedBrie:
