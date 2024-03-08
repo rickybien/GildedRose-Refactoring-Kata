@@ -11,9 +11,9 @@ class DailyFreshFactory
     public static function createDailyFresh($name): DailyFreshInterface
     {
         return match ($name) {
-            ItemName::AGED_BRIE => new AgedBrieDailyRefresh(),
-            ItemName::BACKSTAGE_PASSES => new BackstagePassesTAFKAL80ETCDailyRefresh(),
-            ItemName::HandofRagnaros => new HandofRagnarosDailyRefresh(),
+            ItemName::AGED_BRIE->value => new AgedBrieDailyRefresh(),
+            ItemName::BACKSTAGE_PASSES->value => new BackstagePassesTAFKAL80ETCDailyRefresh(),
+            ItemName::HandofRagnaros->value => new HandofRagnarosDailyRefresh(),
             default => new NormalDailyRefresh(),
         };
     }
