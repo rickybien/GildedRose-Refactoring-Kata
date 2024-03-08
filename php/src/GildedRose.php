@@ -83,6 +83,8 @@ final class GildedRose
             }
             if ($item->quality >= self::QUALITY_DEFAULT_RANGE['default_up'] && $item->name != 'Sulfuras, Hand of Ragnaros') {
                 $item->quality = self::QUALITY_DEFAULT_RANGE['default_up'];
+            } elseif ($item->quality >= self::QUALITY_DEFAULT_RANGE['Sulfuras, Hand of Ragnaros'] && $item->name == 'Sulfuras, Hand of Ragnaros') {
+                $item->quality = self::QUALITY_DEFAULT_RANGE['Sulfuras, Hand of Ragnaros'];
             } elseif ($item->quality < self::QUALITY_DEFAULT_RANGE['default_down']) {
                 $item->quality = self::QUALITY_DEFAULT_RANGE['default_down'];
             }
