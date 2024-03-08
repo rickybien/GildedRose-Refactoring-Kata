@@ -1,7 +1,9 @@
-package gildedrose
+package strategy
+
+import "github.com/emilybache/gildedrose-refactoring-kata/gildedrose/item"
 
 type AgedBrie struct {
-	*Item
+	*item.Item
 }
 
 func (item *AgedBrie) UpdateSellIn() {

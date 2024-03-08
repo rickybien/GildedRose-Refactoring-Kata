@@ -1,4 +1,4 @@
-package gildedrose
+package strategy
 
 type Strategy interface {
 	UpdateSellIn()

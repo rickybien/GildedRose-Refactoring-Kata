@@ -1,11 +1,11 @@
 package gildedrose
 
-type Item struct {
-	Name            string
-	SellIn, Quality int
-}
+import (
+	"github.com/emilybache/gildedrose-refactoring-kata/gildedrose/item"
+	"github.com/emilybache/gildedrose-refactoring-kata/gildedrose/strategy"
+)
 
-func UpdateQuality(items []*Item) {
+func UpdateQuality(items []*item.Item) {
 	for _, item := range items {
 		s := getStrategy(item)
 		s.UpdateQuality()
@@ -13,17 +13,17 @@ func UpdateQuality(items []*Item) {
 	}
 }
 
-func getStrategy(item *Item) Strategy {
+func getStrategy(item *item.Item) strategy.Strategy {
 	switch item.Name {
 	case "Sulfuras, Hand of Ragnaros":
-		return &Sulfuras{item}
+		return &strategy.Sulfuras{Item: item}
 	case "Aged Brie":
-		return &AgedBrie{item}
+		return &strategy.AgedBrie{Item: item}
 	case "Backstage passes to a TAFKAL80ETC concert":
-		return &BackstagePasses{item}
+		return &strategy.BackstagePasses{Item: item}
 	case "Conjured":
-		return &Conjured{item}
+		return &strategy.Conjured{Item: item}
 	default:
-		return &Normal{item}
+		return &strategy.Normal{Item: item}
 	}
 }

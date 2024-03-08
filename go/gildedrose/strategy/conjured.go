@@ -1,7 +1,9 @@
-package gildedrose
+package strategy
+
+import "github.com/emilybache/gildedrose-refactoring-kata/gildedrose/item"
 
 type Conjured struct {
-	*Item
+	*item.Item
 }
 
 func (item *Conjured) UpdateSellIn() {

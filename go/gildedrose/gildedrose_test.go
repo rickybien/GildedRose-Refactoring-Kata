@@ -4,11 +4,12 @@ import (
 	"testing"
 
 	"github.com/emilybache/gildedrose-refactoring-kata/gildedrose"
+	"github.com/emilybache/gildedrose-refactoring-kata/gildedrose/item"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestUpdatesNormalItemsBeforeSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"normal", 5, 10},
 	}
 
@@ -19,7 +20,7 @@ func TestUpdatesNormalItemsBeforeSellDate(t *testing.T) {
 }
 
 func TestUpdatesNormalItemsOnSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"normal", 0, 10},
 	}
 
@@ -30,7 +31,7 @@ func TestUpdatesNormalItemsOnSellDate(t *testing.T) {
 }
 
 func TestUpdatesNormalItemsAfterSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"normal", -5, 10},
 	}
 
@@ -41,7 +42,7 @@ func TestUpdatesNormalItemsAfterSellDate(t *testing.T) {
 }
 
 func TestUpdatesNormalItemsWithAQualityOf0(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"normal", 5, 0},
 	}
 
@@ -55,7 +56,7 @@ func TestUpdatesNormalItemsWithAQualityOf0(t *testing.T) {
 // Brie item
 // -----------------
 func TestUpdatesBrieItemsBeforeSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Aged Brie", 5, 10},
 	}
 
@@ -66,7 +67,7 @@ func TestUpdatesBrieItemsBeforeSellDate(t *testing.T) {
 }
 
 func TestUpdatesBrieItemsBeforeSellDateWithMaximumQuality(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Aged Brie", 5, 50},
 	}
 
@@ -77,7 +78,7 @@ func TestUpdatesBrieItemsBeforeSellDateWithMaximumQuality(t *testing.T) {
 }
 
 func TestUpdatesBrieItemsOnSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Aged Brie", 0, 10},
 	}
 
@@ -88,7 +89,7 @@ func TestUpdatesBrieItemsOnSellDate(t *testing.T) {
 }
 
 func TestUpdatesBrieItemsOnSellDateNearMaximumQuality(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Aged Brie", 0, 49},
 	}
 
@@ -99,7 +100,7 @@ func TestUpdatesBrieItemsOnSellDateNearMaximumQuality(t *testing.T) {
 }
 
 func TestUpdatesBrieItemsOnSellDateWithMaximumQuality(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Aged Brie", 0, 50},
 	}
 
@@ -110,7 +111,7 @@ func TestUpdatesBrieItemsOnSellDateWithMaximumQuality(t *testing.T) {
 }
 
 func TestUpdatesBrieItemsAfterSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Aged Brie", -10, 10},
 	}
 
@@ -121,7 +122,7 @@ func TestUpdatesBrieItemsAfterSellDate(t *testing.T) {
 }
 
 func TestUpdatesBrieItemsAfterSellDateWithMaximumQuality(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Aged Brie", -10, 50},
 	}
 
@@ -135,7 +136,7 @@ func TestUpdatesBrieItemsAfterSellDateWithMaximumQuality(t *testing.T) {
 // Sulfuras item
 // -----------------
 func TestUpdatesSulfurasItemsBeforeSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Sulfuras, Hand of Ragnaros", 5, 10},
 	}
 
@@ -146,7 +147,7 @@ func TestUpdatesSulfurasItemsBeforeSellDate(t *testing.T) {
 }
 
 func TestUpdatesSulfurasItemsOnSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Sulfuras, Hand of Ragnaros", 0, 10},
 	}
 
@@ -157,7 +158,7 @@ func TestUpdatesSulfurasItemsOnSellDate(t *testing.T) {
 }
 
 func TestUpdatesSulfurasItemsAfterSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Sulfuras, Hand of Ragnaros", -1, 10},
 	}
 
@@ -171,7 +172,7 @@ func TestUpdatesSulfurasItemsAfterSellDate(t *testing.T) {
 // Backstage Pass
 // -----------------
 func TestUpdatesBackstagePassItemsLongBeforeSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 11, 10},
 	}
 
@@ -182,7 +183,7 @@ func TestUpdatesBackstagePassItemsLongBeforeSellDate(t *testing.T) {
 }
 
 func TestUpdatesBackstagePassItemsCloseToBeforeSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 10, 10},
 	}
 
@@ -193,7 +194,7 @@ func TestUpdatesBackstagePassItemsCloseToBeforeSellDate(t *testing.T) {
 }
 
 func TestUpdatesBackstagePassItemsCloseToSellDateAtMaximumQuality(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 10, 50},
 	}
 
@@ -204,7 +205,7 @@ func TestUpdatesBackstagePassItemsCloseToSellDateAtMaximumQuality(t *testing.T) 
 }
 
 func TestUpdatesBackstagePassItemsVeryCloseToSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 5, 10},
 	}
 
@@ -215,7 +216,7 @@ func TestUpdatesBackstagePassItemsVeryCloseToSellDate(t *testing.T) {
 }
 
 func TestUpdatesBackstagePassItemsVeryCloseToSellDateAtMaximumQuality(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 5, 50},
 	}
 
@@ -226,7 +227,7 @@ func TestUpdatesBackstagePassItemsVeryCloseToSellDateAtMaximumQuality(t *testing
 }
 
 func TestUpdatesBackstagePassItemsWithOneDayLeftToSellDateAtMaximumQuality(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 1, 50},
 	}
 
@@ -237,7 +238,7 @@ func TestUpdatesBackstagePassItemsWithOneDayLeftToSellDateAtMaximumQuality(t *te
 }
 
 func TestUpdatesBackstagePassItemsOnSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", 0, 10},
 	}
 
@@ -248,7 +249,7 @@ func TestUpdatesBackstagePassItemsOnSellDate(t *testing.T) {
 }
 
 func TestUpdatesBackstagePassItemsAfterSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Backstage passes to a TAFKAL80ETC concert", -1, 10},
 	}
 
@@ -262,7 +263,7 @@ func TestUpdatesBackstagePassItemsAfterSellDate(t *testing.T) {
 // Conjured
 // -----------------
 func TestUpdatesConjuredItemsBeforeSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Conjured", 5, 10},
 	}
 
@@ -273,7 +274,7 @@ func TestUpdatesConjuredItemsBeforeSellDate(t *testing.T) {
 }
 
 func TestUpdatesConjuredItemsOnSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Conjured", 0, 10},
 	}
 
@@ -284,7 +285,7 @@ func TestUpdatesConjuredItemsOnSellDate(t *testing.T) {
 }
 
 func TestUpdatesConjuredItemsAfterSellDate(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Conjured", -5, 10},
 	}
 
@@ -295,7 +296,7 @@ func TestUpdatesConjuredItemsAfterSellDate(t *testing.T) {
 }
 
 func TestUpdatesConjuredItemsWithAQualityOf0(t *testing.T) {
-	var items = []*gildedrose.Item{
+	var items = []*item.Item{
 		{"Conjured", 5, 0},
 	}
 
