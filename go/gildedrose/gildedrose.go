@@ -6,53 +6,67 @@ type Item struct {
 }
 
 func UpdateQuality(items []*Item) {
-	for i := 0; i < len(items); i++ {
-
-		if items[i].Name != "Aged Brie" && items[i].Name != "Backstage passes to a TAFKAL80ETC concert" {
-			if items[i].Quality > 0 {
-				if items[i].Name != "Sulfuras, Hand of Ragnaros" {
-					items[i].Quality = items[i].Quality - 1
-				}
-			}
-		} else {
-			if items[i].Quality < 50 {
-				items[i].Quality = items[i].Quality + 1
-				if items[i].Name == "Backstage passes to a TAFKAL80ETC concert" {
-					if items[i].SellIn < 11 {
-						if items[i].Quality < 50 {
-							items[i].Quality = items[i].Quality + 1
-						}
-					}
-					if items[i].SellIn < 6 {
-						if items[i].Quality < 50 {
-							items[i].Quality = items[i].Quality + 1
-						}
-					}
-				}
-			}
-		}
-
-		if items[i].Name != "Sulfuras, Hand of Ragnaros" {
-			items[i].SellIn = items[i].SellIn - 1
-		}
-
-		if items[i].SellIn < 0 {
-			if items[i].Name != "Aged Brie" {
-				if items[i].Name != "Backstage passes to a TAFKAL80ETC concert" {
-					if items[i].Quality > 0 {
-						if items[i].Name != "Sulfuras, Hand of Ragnaros" {
-							items[i].Quality = items[i].Quality - 1
-						}
-					}
-				} else {
-					items[i].Quality = items[i].Quality - items[i].Quality
-				}
-			} else {
-				if items[i].Quality < 50 {
-					items[i].Quality = items[i].Quality + 1
-				}
-			}
+	for _, item := range items {
+		switch item.Name {
+		case "Sulfuras, Hand of Ragnaros":
+			Sulfuras(item)
+		case "Aged Brie":
+			AgedBrie(item)
+		case "Backstage passes to a TAFKAL80ETC concert":
+			BackstagePasses(item)
+		default:
+			Normal(item)
 		}
 	}
+}
 
+func Sulfuras(item *Item) {
+	// pass
+}
+
+func AgedBrie(item *Item) {
+	if item.Quality < 50 {
+		if item.SellIn <= 0 {
+			item.Quality += 2
+		} else {
+			item.Quality += 1
+		}
+	}
+	if item.Quality > 50 {
+		item.Quality = 50
+	}
+
+	item.SellIn -= 1
+}
+
+func BackstagePasses(item *Item) {
+	switch {
+	case item.SellIn <= 0:
+		item.Quality = 0
+	case item.SellIn <= 5:
+		item.Quality += 3
+	case item.SellIn <= 10:
+		item.Quality += 2
+	default:
+		item.Quality += 1
+	}
+	if item.Quality > 50 {
+		item.Quality = 50
+	}
+
+	item.SellIn -= 1
+}
+
+func Normal(item *Item) {
+	switch {
+	case item.SellIn <= 0:
+		item.Quality -= 2
+	default:
+		item.Quality -= 1
+	}
+	if item.Quality < 0 {
+		item.Quality = 0
+	}
+
+	item.SellIn -= 1
 }
