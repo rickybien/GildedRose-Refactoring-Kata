@@ -109,7 +109,7 @@ describe("Backstage Pass", function () {
     const gildedRose = new GildedRose([new Item("Backstage passes to a TAFKAL80ETC concert", 11, 10)]);
     const items = gildedRose.updateQuality();
     expect(items[0].sellIn).toBe(10);
-    expect(items[0].quality).toBe(11);
+    expect(items[0].quality).toBe(12);
   });
 
   it("close to before sell date", function() {
