@@ -11,7 +11,7 @@ class NormalDailyRefresh implements DailyFreshInterface
         return 1;
     }
 
-    public function qualityDecrease($sellIn): int
+    public function qualityDecrease(int $sellIn, int $quality): int
     {
         return 1;
     }

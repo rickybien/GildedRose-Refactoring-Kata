@@ -11,7 +11,7 @@ class HandofRagnarosDailyRefresh implements DailyFreshInterface
         return 0;
     }
 
-    public function qualityDecrease($sellIn): int
+    public function qualityDecrease(int $sellIn, int $quality): int
     {
         return 0;
     }
