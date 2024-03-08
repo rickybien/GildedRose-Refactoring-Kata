@@ -1,6 +1,15 @@
-export { OtherItem } from './otherItem';
-export { AgedBrie } from './agedBrie';
-export { BackstagePasses } from './backstagePasses';
-export { Conjured } from './conjured';
-export { Sulfuras } from './sulfuras';
-export { Item } from './item'
+const Item = require('./item');
+const AgedBrie = require('./agedBrie');
+const BackstagePasses = require('./backstagePasses');
+const Sulfuras = require('./sulfuras');
+const OtherItem = require('./otherItem');
+const Conjured = require('./conjured');
+
+module.exports = {
+    Item,
+    AgedBrie,
+    BackstagePasses,
+    Sulfuras,
+    OtherItem,
+    Conjured,
+};

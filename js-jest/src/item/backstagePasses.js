@@ -1,6 +1,6 @@
-import { Item } from "./item"
+const Item = require('./item');
 
-export class BackstagePasses extends Item {
+class BackstagePasses extends Item {
     constructor(sellIn, quality) {
         super('Backstage passes to a TAFKAL80ETC concert', sellIn, quality);
     }
@@ -11,13 +11,15 @@ export class BackstagePasses extends Item {
     // 但一旦过期，品质就会降为0
     updateQuality() {
         if (this.sellIn < 0) return 0;
-        if (this.sellIn <= 5) return this.quality + 3;
-        if (this.sellIn <= 10) return this.quality + 2;
+        if (this.sellIn < 5) return this.quality + 3;
+        if (this.sellIn < 10) return this.quality + 2;
         return this.quality + 1;
     }
 
-    update() {
+    updateItem() {
         this.sellIn -= 1;
         this.quality = Math.min(50, this.updateQuality());
     }
 }
+
+module.exports = BackstagePasses;

@@ -1,18 +1,18 @@
-import {
+const {
   Item,
   OtherItem,
   AgedBrie,
   BackstagePasses,
   Conjured,
   Sulfuras,
-} from "./item"
+} = require('./item');
 
 class Shop {
   constructor(items = []) {
     this.items = items.map((item) => {
       switch (item.name) {
         case 'Sulfuras, Hand of Ragnaros':
-          return new Sulfuras();
+          return new Sulfuras(item.sellIn, item.quality);
         case 'Aged Brie':
           return new AgedBrie(item.sellIn, item.quality);
         case 'Backstage passes to a TAFKAL80ETC concert':
@@ -30,7 +30,7 @@ class Shop {
   }
 }
 
-export {
+module.exports = {
   Item,
-  Shop
-}
+  Shop,
+};
