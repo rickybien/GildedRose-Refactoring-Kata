@@ -56,7 +56,7 @@ final class GildedRose
                         if ($item->quality > 0) {
                             if ($item->name != 'Sulfuras, Hand of Ragnaros') {
                                 $item->quality = $item->quality - 1;
-                                if ($item->name === 'Conjured') {
+                                if ($item->name === 'Conjured' && $item->quality > 0) {
                                     $item->quality = $item->quality - 1;
                                 }
                             }
