@@ -9,6 +9,10 @@ class Item {
 class Shop {
   constructor(items=[]){
     this.items = items;
+    this.legendaryItem = 'Sulfuras, Hand of Ragnaros';
+    this.decreaseScale = 1;
+    this.qualityMax = 50;
+    this.qualityMin = 0;
   }
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
