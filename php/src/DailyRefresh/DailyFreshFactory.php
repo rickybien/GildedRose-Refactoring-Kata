@@ -14,6 +14,7 @@ class DailyFreshFactory
             ItemName::AGED_BRIE->value => new AgedBrieDailyRefresh(),
             ItemName::BACKSTAGE_PASSES->value => new BackstagePassesTAFKAL80ETCDailyRefresh(),
             ItemName::HandofRagnaros->value => new HandofRagnarosDailyRefresh(),
+            ItemName::Conjured->value => new ConjuredDailyRefresh(),
             default => new NormalDailyRefresh(),
         };
     }
