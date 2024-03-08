@@ -12,6 +12,7 @@ class Shop {
     this.legendaryItem = 'Sulfuras, Hand of Ragnaros';
     this.decreaseSellIn = 1;
     this.decreaseQuality = 1;
+    this.sellInMin = 0;
     this.qualityMax = 50;
     this.qualityMin = 0;
 
@@ -39,12 +40,12 @@ class Shop {
   }
 
   updateNormal(item) {
-    item.sellIn < 0 ? item.quality -= this.decreaseQuality * 2 : item.quality -= this.decreaseQuality
+    item.sellIn < this.sellInMin ? item.quality -= this.decreaseQuality * 2 : item.quality -= this.decreaseQuality
     item.quality < this.qualityMin ? item.quality = this.qualityMin : item.quality
   }
 
   updateAgedBrie(item) {
-    item.sellIn < 0 ? item.quality += this.decreaseQuality * 2 : item.quality += this.decreaseQuality
+    item.sellIn < this.sellInMin ? item.quality += this.decreaseQuality * 2 : item.quality += this.decreaseQuality
     item.quality > this.qualityMax ? item.quality = this.qualityMax : item.quality
   }
 
@@ -56,8 +57,8 @@ class Shop {
     const firstSellInStage = 10
     const secondSellInStage = 6
 
-    if(item.sellIn < 0) {
-      item.quality = 0
+    if(item.sellIn < this.sellInMin) {
+      item.quality = this.qualityMin
     } else if(item.sellIn < secondSellInStage) {
       item.quality += this.decreaseQuality * 3
     } else if(item.sellIn < firstSellInStage) {
@@ -69,7 +70,7 @@ class Shop {
   }
 
   updateConjured(item) {
-    item.sellIn < 0 ? item.quality -= this.decreaseQuality * 4 : item.quality -= this.decreaseQuality * 2
+    item.sellIn < this.sellInMin ? item.quality -= this.decreaseQuality * 4 : item.quality -= this.decreaseQuality * 2
     item.quality < this.qualityMin ? item.quality = this.qualityMin : item.quality
   }
 }
