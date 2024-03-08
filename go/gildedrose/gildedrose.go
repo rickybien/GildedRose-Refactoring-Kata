@@ -14,6 +14,8 @@ func UpdateQuality(items []*Item) {
 			AgedBrie(item)
 		case "Backstage passes to a TAFKAL80ETC concert":
 			BackstagePasses(item)
+		case "Conjured":
+			Conjured(item)
 		default:
 			Normal(item)
 		}
@@ -52,6 +54,20 @@ func BackstagePasses(item *Item) {
 	}
 	if item.Quality > 50 {
 		item.Quality = 50
+	}
+
+	item.SellIn -= 1
+}
+
+func Conjured(item *Item) {
+	switch {
+	case item.SellIn <= 0:
+		item.Quality -= 4
+	default:
+		item.Quality -= 2
+	}
+	if item.Quality < 0 {
+		item.Quality = 0
 	}
 
 	item.SellIn -= 1
