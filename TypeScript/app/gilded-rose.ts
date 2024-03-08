@@ -17,6 +17,13 @@ export class GildedRose {
     this.items = items;
   }
 
+  private checkItemQualityMaximized(item: Item): boolean { 
+    return item.quality >= 50;
+  }
+  private checkItemQualityMinimized(item: Item): boolean {
+    return item.quality <= 0;
+  }
+
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       if (this.items[i].name == 'Sulfuras, Hand of Ragnaros') continue;
@@ -27,9 +34,6 @@ export class GildedRose {
       switch (this.items[i].name) {
         case 'Aged Brie':
           this.items[i].quality += isSellInLessThanZero ? 2 : 1;
-          if (this.items[i].quality > 50) {
-            this.items[i].quality = 50;
-          }
           break;
         case 'Backstage passes to a TAFKAL80ETC concert':
           if (isSellInLessThanZero) {
@@ -43,23 +47,21 @@ export class GildedRose {
             if (this.items[i].sellIn < 6) { 
               this.items[i].quality += 1;
             }
-
-            if (this.items[i].quality > 50) {
-              this.items[i].quality = 50;
-            }
           }
           break;
         case 'Conjured':
           this.items[i].quality -= isSellInLessThanZero ? 4 : 2;
-          if (this.items[i].quality < 0) {
-            this.items[i].quality = 0;
-          }
           break;
         default:
           this.items[i].quality -= isSellInLessThanZero ? 2 : 1
-          if (this.items[i].quality < 0) {
-            this.items[i].quality = 0;
-          }
+      }
+
+
+      if (this.checkItemQualityMaximized(this.items[i])) {
+        this.items[i].quality = 50;
+      }
+      if (this.checkItemQualityMinimized(this.items[i])) {
+        this.items[i].quality = 0;
       }
     }
 
