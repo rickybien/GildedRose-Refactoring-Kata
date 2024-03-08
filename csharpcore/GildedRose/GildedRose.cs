@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 namespace GildedRoseKata
 {
     public class GildedRose
@@ -12,77 +11,65 @@ namespace GildedRoseKata
 
         public void UpdateQuality()
         {
-            for (var i = 0; i < Items.Count; i++)
+            foreach(var item in Items)
             {
-                if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
+                //處理后台通行证與陈年布利奶酪
+                if (item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert")
                 {
-                    if (Items[i].Quality > 0)
+
+                    item.Quality = item.Quality < 50 ? item.Quality + 1 : item.Quality;
+                    //處理后台通行证
+                    if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
                     {
-                        if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
+                        //天數5<x<10會再增加一
+                        if (item.SellIn <= 10)
                         {
-                            Items[i].Quality = Items[i].Quality - 1;
+                            item.Quality = item.Quality < 50 ? item.Quality + 1 : 50;
                         }
-                    }
-                }
-                else
-                {
-                    if (Items[i].Quality < 50)
-                    {
-                        Items[i].Quality = Items[i].Quality + 1;
-
-                        if (Items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
+                        //天數x<=5會再增加一
+                        if (item.SellIn <= 5)
                         {
-                            if (Items[i].SellIn < 11)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-
-                            if (Items[i].SellIn < 6)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
+                            item.Quality = item.Quality < 50 ? item.Quality + 1 : 50;
                         }
-                    }
-                }
-
-                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                {
-                    Items[i].SellIn = Items[i].SellIn - 1;
-                }
-
-                if (Items[i].SellIn < 0)
-                {
-                    if (Items[i].Name != "Aged Brie")
-                    {
-                        if (Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
+                        if (item.SellIn <= 0)
                         {
-                            if (Items[i].Quality > 0)
-                            {
-                                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                                {
-                                    Items[i].Quality = Items[i].Quality - 1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Items[i].Quality = Items[i].Quality - Items[i].Quality;
+                            item.Quality = 0;
                         }
                     }
                     else
                     {
-                        if (Items[i].Quality < 50)
+                        //處理陳年乳酪過了銷售日品質會再加一
+                        if(item.SellIn<=0)
+                            item.Quality = item.Quality < 50 ? item.Quality + 1 : 50;
+                    }
+                    
+                    item.SellIn--;
+
+                }
+                else if (item.Name == "Sulfuras, Hand of Ragnaros")//不處理傳奇物件
+                {
+                    continue;
+                }
+                else//其餘商品 
+                {
+                    //品質大於零時每天減少一點
+                    item.Quality = item.Quality > 0 ? item.Quality - 1 : 0;
+                    if (item.Name == "Conjured Mana Cake")//新需求加入cake
+                    {
+                        item.Quality = item.Quality > 0 ? item.Quality - 1 : 0;
+                    }
+                    item.SellIn--;
+                    if (item.SellIn < 0 && item.Quality > 0)
+                    {
+                        item.Quality = item.Quality - 1;
+                        if (item.Name == "Conjured Mana Cake" && item.Quality>0)//新需求加入cake品質都會增加一
                         {
-                            Items[i].Quality = Items[i].Quality + 1;
+                            item.Quality = item.Quality - 1;
                         }
                     }
+                    
                 }
+                
             }
         }
     }
