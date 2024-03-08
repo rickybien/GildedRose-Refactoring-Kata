@@ -10,6 +10,10 @@ export class Item {
   }
 }
 
+const qualityMaximum = 50
+const qualityMinimum = 0
+
+
 export class GildedRose {
   items: Array<Item>;
 
@@ -17,52 +21,73 @@ export class GildedRose {
     this.items = items;
   }
 
-  updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1
-          }
-        }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-          }
-        }
-      }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1
-              }
-            }
-          } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
-          }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
-          }
-        }
-      }
+  static normalQualityDegradeRate = 1
+  static outDateQualityDegradeRate = 2
+
+  fixQuality(quality: number) {
+    if (quality > qualityMaximum) {
+      return qualityMaximum
     }
+    if (quality < qualityMinimum) {
+      return qualityMinimum
+    }
+    return quality
+  }
+
+  calcAgedBrieQuality(nextSellIn: number, quality: number) {
+    return this.fixQuality(quality + (nextSellIn < 0 ? 2 : 1))
+  }
+
+  calcBackstagePassQuality(nextSellIn: number, quality: number) {
+    let nextQuality: number
+    switch (true) {
+      case nextSellIn < 0:
+        nextQuality = 0
+        break
+      case nextSellIn < 5:
+        nextQuality = quality + 3
+        break
+      case nextSellIn < 10: 
+        nextQuality = quality + 2
+        break
+      default:
+        nextQuality = quality + 1
+        break
+    }
+    return this.fixQuality(nextQuality)
+  }
+
+  calcNormalQuality(nextSellIn: number, quality: number) {
+    return this.fixQuality(quality - (nextSellIn < 0 ? GildedRose.outDateQualityDegradeRate : GildedRose.normalQualityDegradeRate))
+  }
+
+  calcConjuredQuality(nextSellIn: number, quality: number) {
+    return this.fixQuality(quality - 2 * (nextSellIn < 0 ? GildedRose.outDateQualityDegradeRate : GildedRose.normalQualityDegradeRate))
+  }
+
+  updateQuality() {
+    this.items.forEach(item => {
+      const nextSellIn = item.sellIn - 1
+      switch (item.name) {
+        case 'Aged Brie':
+          item.sellIn = nextSellIn
+          item.quality = this.calcAgedBrieQuality(nextSellIn, item.quality)
+          break
+        case 'Backstage passes to a TAFKAL80ETC concert':
+          item.sellIn = nextSellIn
+          item.quality = this.calcBackstagePassQuality(nextSellIn, item.quality)
+        case 'Sulfuras, Hand of Ragnaros':
+          break
+        case 'Conjured':
+          item.sellIn = nextSellIn
+          item.quality = this.calcConjuredQuality(nextSellIn, item.quality)
+          break
+        default:
+          item.sellIn = nextSellIn
+          item.quality = this.calcNormalQuality(nextSellIn, item.quality)
+          return
+      }
+    })
 
     return this.items;
   }
