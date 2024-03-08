@@ -3,13 +3,20 @@ export class Item {
   sellIn: number;
   quality: number;
 
-  constructor(name, sellIn, quality) {
+  constructor(name: string, sellIn: number, quality: number) {
     this.name = name;
     this.sellIn = sellIn;
     this.quality = quality;
   }
 }
 
+enum ItemType { 
+  Normal = 'normal',
+  AgedBrie = 'Aged Brie',
+  Sulfuras = 'Sulfuras, Hand of Ragnaros',
+  Backstage = 'Backstage passes to a TAFKAL80ETC concert',
+  Conjured = 'Conjured Mana Cake'
+}
 export class GildedRose {
   items: Array<Item>;
 
