@@ -46,12 +46,17 @@ class Shop {
     }
     if (item.quality > 50) item.quality = 50
   }
-  
+
   updateNormalGoodsQuality (item) {
     if (item.sellIn > 0) item.quality--
     else item.quality -= 2
 
     if (item.quality < 0) item.quality = 0
+  }
+
+  updateConjuredGoodsQuality (item) {
+    this.updateNormalGoodsQuality(item)
+    this.updateNormalGoodsQuality(item)    
   }
 
   updateQuality() {
@@ -68,6 +73,10 @@ class Shop {
           this.updateSellIn(item)
           break
         case ImmortalGoodsArr.includes(name):
+          break
+        case name.includes('conjured'):   // if conjured items are all started with "conjured", then the function could be changed to "startsWith".
+          this.updateConjuredGoodsQuality(item)
+          this.updateSellIn(item)
           break
         default:
           this.updateNormalGoodsQuality(item)
