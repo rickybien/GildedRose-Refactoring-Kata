@@ -11,6 +11,8 @@ const backstage = ['Backstage passes to a TAFKAL80ETC concert'];
 const sulfuras = ['Sulfuras, Hand of Ragnaros'];
 
 
+// Conjured `Quality`下降速度比正常物品快一倍
+const conjured = ['Conjured Mana Cake'];
 
 class Item {
   constructor(name, sellIn, quality){
@@ -40,7 +42,7 @@ class Shop {
             quality++;
           }
         } else {
-          let diff = (sellIn < 0) ? 2 : 1;
+          let diff = (sellIn < 0 || conjured.includes(name)) ? 2 : 1;
           diff *= (aged.includes(name))? 1 : -1;
           quality += diff;
         }
