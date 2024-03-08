@@ -1,8 +1,4 @@
-import {
-  specialItems,
-  checkSpecialItemByName,
-  clamp,
-} from './helper';
+import { itemSettings } from './config';
 
 class Item {
   constructor(name, sellIn, quality){
@@ -18,54 +14,11 @@ class Shop {
   }
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      if(this.items[i].name === specialItems.SULFURAS) {
-        return this.items;
-      }
+      const currentSetting = itemSettings[this.items[i].name] ?? itemSettings.DEFAULT;
 
-      this.items[i].sellIn--;
-
-      const item = this.items[i];
-      const { name, sellIn, quality } = item;
-
-      // normal item
-      if(!checkSpecialItemByName(name)) {
-        if(sellIn < 0) {
-          this.items[i].quality = clamp(quality - 2);
-        } else {
-          this.items[i].quality = clamp(quality - 1);
-        }
-      }
-
-      // special item
-      if(name === specialItems.CONJURED) {
-        if(sellIn < 0) {
-          this.items[i].quality = clamp(quality - 4);
-        } else {
-          this.items[i].quality = clamp(quality - 2);
-        }
-      }
-
-      if(name === specialItems.AGED_BRIE) {
-        if(sellIn < 0) {
-          this.items[i].quality = clamp(quality + 2);
-        } else {
-          this.items[i].quality = clamp(quality + 1);
-        }
-      }
-
-      if(name === specialItems.BACKSTAGE_PASSES) {
-        if(sellIn < 0) {
-          this.items[i].quality = 0;
-        } else if(sellIn < 5) {
-          this.items[i].quality = clamp(quality + 3);
-        } else if(sellIn < 10) {
-          this.items[i].quality = clamp(quality + 2);
-        } else {
-          this.items[i].quality = clamp(quality + 1);
-        }
-      }
+      this.items[i].sellIn = currentSetting.sellIn(this.items[i].sellIn);
+      this.items[i].quality = currentSetting.quality(this.items[i].sellIn, this.items[i].quality);
     }
-
     return this.items;
   }
 }
