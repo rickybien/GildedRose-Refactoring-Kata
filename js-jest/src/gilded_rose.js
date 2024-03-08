@@ -1,3 +1,17 @@
+// aged `Quality`会随着时间推移而提高
+const aged = ['Aged Brie']; 
+
+// backstage `Quality`会随着时间推移而提高；
+// 当还剩10天或更少的时候，品质`Quality`每天提高2
+// 当还剩5天或更少的时候，品质`Quality`每天提高3
+// 但一旦过期，品质就会降为0
+const backstage = ['Backstage passes to a TAFKAL80ETC concert']; 
+
+// sulfuras 永不过期，也不会降低品质`Quality`
+const sulfuras = ['Sulfuras, Hand of Ragnaros'];
+
+
+
 class Item {
   constructor(name, sellIn, quality){
     this.name = name;
@@ -12,49 +26,27 @@ class Shop {
   }
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1;
-          }
-        }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-          }
-        }
-      }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1;
-              }
-            }
+      let { name, quality, sellIn } = this.items[i];
+      if (!sulfuras.includes(name)) {
+        sellIn--;
+        if (backstage.includes(name)) {
+          if (sellIn < 0) {
+            quality = 0;
+          } else if (sellIn < 5) {
+            quality += 3;
+          } else if (sellIn < 10) {
+            quality += 2;
           } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality;
+            quality++;
           }
         } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
+          let diff = (sellIn < 0) ? 2 : 1;
+          diff *= (aged.includes(name))? 1 : -1;
+          quality += diff;
         }
       }
+      this.items[i].quality = (quality < 0) ? 0 : (quality > 50) ? 50 : quality;
+      this.items[i].sellIn = sellIn;
     }
 
     return this.items;
