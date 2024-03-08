@@ -83,24 +83,24 @@ describe("Aged Brie Item", function () {
 
 describe("Sulfuras item", function () {
   it("before sell date", function() {
-    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", 5, 10)]);
+    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", 5, 80)]);
     const items = gildedRose.updateQuality();
     expect(items[0].sellIn).toBe(5);
-    expect(items[0].quality).toBe(10);
+    expect(items[0].quality).toBe(80);
   });
 
   it("on sell date", function() {
-    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", 0, 10)]);
+    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", 0, 80)]);
     const items = gildedRose.updateQuality();
     expect(items[0].sellIn).toBe(0);
-    expect(items[0].quality).toBe(10);
+    expect(items[0].quality).toBe(80);
   });
 
   it("after sell date", function() {
-    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", -1, 10)]);
+    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", -1, 80)]);
     const items = gildedRose.updateQuality();
     expect(items[0].sellIn).toBe(-1);
-    expect(items[0].quality).toBe(10);
+    expect(items[0].quality).toBe(80);
   });
 });
 
