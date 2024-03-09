@@ -20,10 +20,8 @@ func (b *AgedBrieBuilder) calculQuality(item *Item) {
 		b.Quality = b.Quality + 1
 	}
 
-	if b.SellIn < 0 {
-		if b.Quality < 50 {
-			b.Quality = b.Quality + 1
-		}
+	if b.SellIn < 0 && b.Quality < 50 {
+		b.Quality = b.Quality + 1
 	}
 }
 

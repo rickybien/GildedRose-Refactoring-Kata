@@ -31,7 +31,7 @@ func (b *BackstagePassesBuilder) calculQuality(item *Item) {
 	}
 
 	if b.SellIn < 0 {
-		b.Quality = b.Quality - b.Quality
+		b.Quality = 0
 	}
 }
 

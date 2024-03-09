@@ -20,10 +20,8 @@ func (b *ConjuredPassesBuilder) calculQuality(item *Item) {
 	if b.Quality > 0 {
 		b.Quality = b.Quality - 2
 	}
-	if b.SellIn < 0 {
-		if b.Quality > 0 {
-			b.Quality = b.Quality - 2
-		}
+	if b.SellIn < 0 && b.Quality > 0 {
+		b.Quality = b.Quality - 2
 	}
 }
 
