@@ -19,7 +19,11 @@ final class GildedRose
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            if ($item->name === 'Sulfuras, Hand of Ragnaros' || $item->name === 'normal' || $item->name === 'Conjured') {
+            if ($item->name === 'Sulfuras, Hand of Ragnaros' ||
+                $item->name === 'normal' ||
+                $item->name === 'Conjured' ||
+                $item->name === 'Aged Brie'
+            ) {
                 UpdateStrategyFactory::create($item->name)->update($item);
                 break;
             }
