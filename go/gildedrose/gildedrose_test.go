@@ -76,6 +76,16 @@ func (t *gdSuite) TestOther() {
 			ExpQuality: -1,
 			ExpErr:     nil,
 		},
+		{
+			Desc:         "Case 6 Other sellIn 20 quality 10",
+			numberOfDays: 6,
+			items: []*gildedrose.Item{
+				{"Other", 20, 10},
+			},
+			ExpSellIn:  14,
+			ExpQuality: 4,
+			ExpErr:     nil,
+		},
 	}
 
 	for _, c := range testCase {
