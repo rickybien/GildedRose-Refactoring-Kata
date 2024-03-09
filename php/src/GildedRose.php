@@ -19,7 +19,7 @@ final class GildedRose
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            UpdateStrategyFactory::create($item->name)->update($item);
+            UpdateStrategyFactory::create($item)->update();
         }
     }
 }

@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace GildedRose;
 
-class AgedBrieUpdateStrategy implements UpdateStrategyInterface
+class AgedBrieUpdateStrategy extends AbstractBaseUpdate implements UpdateStrategyInterface
 {
-    public function update(Item $item): void
+    public function update(): void
     {
-        if ($item->quality < 50) {
-            ++$item->quality;
+        if ($this->isQualityLessThanMax()) {
+            $this->qualityIncrement();
         }
 
-        --$item->sellIn;
+        $this->sellInDecrement();
 
-        if ($item->sellIn < 0 && $item->quality < 50) {
-            ++$item->quality;
+        if ($this->isSellInLessThanZero() && $this->isQualityLessThanMax()) {
+            $this->qualityIncrement();
         }
     }
 }

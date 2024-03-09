@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace GildedRose;
 
-class ConjuredUpdateStrategy implements UpdateStrategyInterface
+class ConjuredUpdateStrategy extends AbstractBaseUpdate implements UpdateStrategyInterface
 {
-    public function update(Item $item): void
+    public function update(): void
     {
-        if ($item->quality > 0) {
-            --$item->quality;
-            if ($item->quality > 0) {
-                --$item->quality;
+        if ($this->isQualityGreaterThanZero()) {
+            $this->qualityDecrement();
+            if ($this->isQualityGreaterThanZero()) {
+                $this->qualityDecrement();
             }
         }
 
-        --$item->sellIn;
+        $this->sellInDecrement();
 
-        if ($item->sellIn < 0 && $item->quality > 0) {
-            --$item->quality;
-            if ($item->quality > 0) {
-                --$item->quality;
+        if ($this->isSellInLessThanZero() && $this->isQualityGreaterThanZero()) {
+            $this->qualityDecrement();
+            if ($this->isQualityGreaterThanZero()) {
+                $this->qualityDecrement();
             }
         }
     }

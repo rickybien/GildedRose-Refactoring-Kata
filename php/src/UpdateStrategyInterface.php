@@ -6,5 +6,5 @@ namespace GildedRose;
 
 interface UpdateStrategyInterface
 {
-    public function update(Item $item): void;
+    public function update(): void;
 }

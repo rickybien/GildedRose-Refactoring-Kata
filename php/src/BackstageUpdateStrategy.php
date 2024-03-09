@@ -4,24 +4,24 @@ declare(strict_types=1);
 
 namespace GildedRose;
 
-class BackstageUpdateStrategy implements UpdateStrategyInterface
+class BackstageUpdateStrategy extends AbstractBaseUpdate implements UpdateStrategyInterface
 {
-    public function update(Item $item): void
+    public function update(): void
     {
-        if ($item->quality < 50) {
-            ++$item->quality;
-            if ($item->sellIn < 11 && $item->quality < 50) {
-                ++$item->quality;
+        if ($this->isQualityLessThanMax()) {
+            $this->qualityIncrement();
+            if ($this->isSellInLessThan(11) && $this->isQualityLessThanMax()) {
+                $this->qualityIncrement();
             }
-            if ($item->sellIn < 6 && $item->quality < 50) {
-                ++$item->quality;
+            if ($this->isSellInLessThan(6) && $this->isQualityLessThanMax()) {
+                $this->qualityIncrement();
             }
         }
 
-        --$item->sellIn;
+        $this->sellInDecrement();
 
-        if ($item->sellIn < 0) {
-            $item->quality = 0;
+        if ($this->isSellInLessThanZero()) {
+            $this->qualityToZero();
         }
     }
 }

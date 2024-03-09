@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace GildedRose;
 
-class SulfurasUpdateStrategy implements UpdateStrategyInterface
+class SulfurasUpdateStrategy extends AbstractBaseUpdate implements UpdateStrategyInterface
 {
-    public function update(Item $item): void
+    public function update(): void
     {
     }
 }
