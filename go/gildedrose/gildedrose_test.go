@@ -396,6 +396,16 @@ func (t *gdSuite) TestConjured() {
 			ExpQuality: 8,
 			ExpErr:     nil,
 		},
+		{
+			Desc:         "Case 8 Conjured sellIn 20 quality 20",
+			numberOfDays: 6,
+			items: []*gildedrose.Item{
+				{"Conjured", 3, 20},
+			},
+			ExpSellIn:  -3,
+			ExpQuality: 2,
+			ExpErr:     nil,
+		},
 	}
 
 	for _, c := range testCase {
