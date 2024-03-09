@@ -19,5 +19,9 @@ func getBuilder(builderType string) IBuilder {
 		return newBackstagePassesBuilder()
 	}
 
+	if builderType == "Conjured" {
+		return newConjuredBuilder()
+	}
+
 	return newOtherBuilder()
 }
