@@ -75,7 +75,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBrieItemsBeforeSellDate(): void
     {
         // arrange
-        $items = [new Item('Aged Brie', 5, 10)];
+        $items = [new Item(ITEM_NAME_CHEESE, 5, 10)];
         $app = new GildedRose($items);
 
         // act
@@ -89,7 +89,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBrieItemsBeforeSellDateWithMaximumQuality(): void
     {
         // arrange
-        $items = [new Item('Aged Brie', 5, 50)];
+        $items = [new Item(ITEM_NAME_CHEESE, 5, 50)];
         $app = new GildedRose($items);
 
         // act
@@ -103,7 +103,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBrieItemsOnSellDate(): void
     {
         // arrange
-        $items = [new Item('Aged Brie', 0, 10)];
+        $items = [new Item(ITEM_NAME_CHEESE, 0, 10)];
         $app = new GildedRose($items);
 
         // act
@@ -117,7 +117,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBrieItemsOnSellDateNearMaximumQuality(): void
     {
         // arrange
-        $items = [new Item('Aged Brie', 0, 49)];
+        $items = [new Item(ITEM_NAME_CHEESE, 0, 49)];
         $app = new GildedRose($items);
 
         // act
@@ -131,7 +131,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBrieItemsOnSellDateWithMaximumQuality(): void
     {
         // arrange
-        $items = [new Item('Aged Brie', 0, 50)];
+        $items = [new Item(ITEM_NAME_CHEESE, 0, 50)];
         $app = new GildedRose($items);
 
         // act
@@ -145,7 +145,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBrieItemsAfterSellDate(): void
     {
         // arrange
-        $items = [new Item('Aged Brie', -10, 10)];
+        $items = [new Item(ITEM_NAME_CHEESE, -10, 10)];
         $app = new GildedRose($items);
 
         // act
@@ -159,7 +159,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBrieItemsAfterSellDateWithMaximumQuality(): void
     {
         // arrange
-        $items = [new Item('Aged Brie', -10, 50)];
+        $items = [new Item(ITEM_NAME_CHEESE, -10, 50)];
         $app = new GildedRose($items);
 
         // act
@@ -176,7 +176,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesSulfurasItemsBeforeSellDate(): void
     {
         // arrange
-        $items = [new Item('Sulfuras, Hand of Ragnaros', 5, 10)];
+        $items = [new Item(ITEM_NAME_SULFURAS, 5, 10)];
         $app = new GildedRose($items);
 
         // act
@@ -190,7 +190,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesSulfurasItemsOnSellDate(): void
     {
         // arrange
-        $items = [new Item('Sulfuras, Hand of Ragnaros', 0, 10)];
+        $items = [new Item(ITEM_NAME_SULFURAS, 0, 10)];
         $app = new GildedRose($items);
 
         // act
@@ -204,7 +204,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesSulfurasItemsAfterSellDate(): void
     {
         // arrange
-        $items = [new Item('Sulfuras, Hand of Ragnaros', -1, 10)];
+        $items = [new Item(ITEM_NAME_SULFURAS, -1, 10)];
         $app = new GildedRose($items);
 
         // act
@@ -221,7 +221,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBackstagePassItemsLongBeforeSellDate(): void
     {
         // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 11, 10)];
+        $items = [new Item(ITEM_NAME_PASSES, 11, 10)];
         $app = new GildedRose($items);
 
         // act
@@ -235,7 +235,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBackstagePassItemsCloseToBeforeSellDate(): void
     {
         // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 10, 10)];
+        $items = [new Item(ITEM_NAME_PASSES, 10, 10)];
         $app = new GildedRose($items);
 
         // act
@@ -249,7 +249,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBackstagePassItemsCloseToSellDateAtMaximumQuality(): void
     {
         // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 10, 50)];
+        $items = [new Item(ITEM_NAME_PASSES, 10, 50)];
         $app = new GildedRose($items);
 
         // act
@@ -263,7 +263,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBackstagePassItemsVeryCloseToSellDate(): void
     {
         // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 5, 10)];
+        $items = [new Item(ITEM_NAME_PASSES, 5, 10)];
         $app = new GildedRose($items);
 
         // act
@@ -277,7 +277,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBackstagePassItemsVeryCloseToSellDateAtMaximumQuality(): void
     {
         // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 5, 50)];
+        $items = [new Item(ITEM_NAME_PASSES, 5, 50)];
         $app = new GildedRose($items);
 
         // act
@@ -291,7 +291,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBackstagePassItemsWithOneDayLeftToSellDateAtMaximumQuality(): void
     {
         // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 1, 50)];
+        $items = [new Item(ITEM_NAME_PASSES, 1, 50)];
         $app = new GildedRose($items);
 
         // act
@@ -305,7 +305,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBackstagePassItemsOnSellDate(): void
     {
         // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', 0, 10)];
+        $items = [new Item(ITEM_NAME_PASSES, 0, 10)];
         $app = new GildedRose($items);
 
         // act
@@ -319,7 +319,7 @@ class GildedRoseTest extends TestCase
     public function testUpdatesBackstagePassItemsAfterSellDate(): void
     {
         // arrange
-        $items = [new Item('Backstage passes to a TAFKAL80ETC concert', -1, 10)];
+        $items = [new Item(ITEM_NAME_PASSES, -1, 10)];
         $app = new GildedRose($items);
 
         // act
@@ -328,5 +328,69 @@ class GildedRoseTest extends TestCase
         // assert
         $this->assertSame(-2, $items[0]->sellIn);
         $this->assertSame(0, $items[0]->quality);
+    }
+
+    //-----------------
+    // Conjured
+    //-----------------
+    public function testUpdatesConjuredItemsBeforeSellDate(): void
+    {
+        // arrange
+        $items = [new Item(ITEM_NAME_CONJURED, 11, 10)];
+        $app = new GildedRose($items);
+
+        // act
+        $app->updateQuality();
+
+        // assert
+        $this->assertSame(10, $items[0]->sellIn);
+        $this->assertSame(8, $items[0]->quality);
+    }
+
+    public function testUpdatesConjuredItemsOnSellDate(): void
+    {
+        // arrange
+        $items = [new Item(ITEM_NAME_CONJURED, 0, 10)];
+        $app = new GildedRose($items);
+
+        // act
+        $app->updateQuality();
+
+        // assert
+        $this->assertSame(-1, $items[0]->sellIn);
+        $this->assertSame(6, $items[0]->quality);
+    }
+
+    public function testUpdatesConjuredItemsAfterSellDate(): void
+    {
+        // arrange
+        $items = [new Item(ITEM_NAME_CONJURED, -5, 10)];
+        $app = new GildedRose($items);
+
+        // act
+        $app->updateQuality();
+
+        // assert
+        $this->assertSame(-6, $items[0]->sellIn);
+        $this->assertSame(6, $items[0]->quality);
+    }
+
+    public function testUpdatesConjuredItemsWithAQualityOf0(): void
+    {
+        // arrange
+        $items = [
+            new Item(ITEM_NAME_CONJURED, 5, 0),
+            new Item(ITEM_NAME_CONJURED, 10, 0)
+        ];
+        $app = new GildedRose($items);
+
+        // act
+        $app->updateQuality();
+
+        // assert
+        $this->assertSame(4, $items[0]->sellIn);
+        $this->assertSame(0, $items[0]->quality);
+        $this->assertSame(9, $items[1]->sellIn);
+        $this->assertSame(0, $items[1]->quality);
     }
 }
