@@ -10,6 +10,9 @@ final class GildedRose
      * @var Item[]
      */
     private $items;
+    private const AGED_BRIE = 'Aged Brie';
+    private const SULFURAS = 'Sulfuras, Hand of Ragnaros';
+    private const BACKSTAGE = 'Backstage passes to a TAFKAL80ETC concert';
 
     public function __construct(array $items)
     {
@@ -19,51 +22,54 @@ final class GildedRose
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            if ($item->name != 'Aged Brie' and $item->name != 'Backstage passes to a TAFKAL80ETC concert') {
-                if ($item->quality > 0) {
-                    if ($item->name != 'Sulfuras, Hand of Ragnaros') {
-                        $item->quality = $item->quality - 1;
-                    }
+            if ($item->name === self::SULFURAS) {
+                continue;
+            }
+
+            $num = $this->isExpired($item) ? 2 : 1;
+
+            if ($item->name === self::AGED_BRIE) {
+                $this->increaseQuality($item, $num);
+            } elseif ($item->name === self::BACKSTAGE) {
+                if ($this->isExpired($item)) {
+                    $item->quality = 0;
+                    $item->sellIn--;
+                    continue;
                 }
+                $num = $this->calculateNum($item);
+
+                $this->increaseQuality($item, $num);
             } else {
-                if ($item->quality < 50) {
-                    $item->quality = $item->quality + 1;
-                    if ($item->name == 'Backstage passes to a TAFKAL80ETC concert') {
-                        if ($item->sellIn < 11) {
-                            if ($item->quality < 50) {
-                                $item->quality = $item->quality + 1;
-                            }
-                        }
-                        if ($item->sellIn < 6) {
-                            if ($item->quality < 50) {
-                                $item->quality = $item->quality + 1;
-                            }
-                        }
-                    }
-                }
+                $this->decreaseQuality($item, $num);
             }
 
-            if ($item->name != 'Sulfuras, Hand of Ragnaros') {
-                $item->sellIn = $item->sellIn - 1;
-            }
-
-            if ($item->sellIn < 0) {
-                if ($item->name != 'Aged Brie') {
-                    if ($item->name != 'Backstage passes to a TAFKAL80ETC concert') {
-                        if ($item->quality > 0) {
-                            if ($item->name != 'Sulfuras, Hand of Ragnaros') {
-                                $item->quality = $item->quality - 1;
-                            }
-                        }
-                    } else {
-                        $item->quality = $item->quality - $item->quality;
-                    }
-                } else {
-                    if ($item->quality < 50) {
-                        $item->quality = $item->quality + 1;
-                    }
-                }
-            }
+            $item->sellIn--;
         }
+    }
+
+    private function increaseQuality(Item $item, int $multiple): void
+    {
+        $item->quality = min($item->quality + $multiple, 50);
+    }
+
+    private function decreaseQuality(Item $item, int $multiple): void
+    {
+        $item->quality = max($item->quality - $multiple, 0);
+    }
+
+    private function isExpired(Item $item): bool
+    {
+        return $item->sellIn <= 0;
+    }
+
+    private function calculateNum(Item $item): int
+    {
+        $num = 1;
+        if ($item->sellIn <= 5) {
+            $num = 3;
+        } elseif ($item->sellIn <= 10) {
+            $num = 2;
+        }
+        return $num;
     }
 }
