@@ -21,55 +21,15 @@ final class GildedRose
 
     public function updateQuality(): void
     {
+        $mappingClass = [
+            self::AGED_BRIE => AgedBrieItem::class,
+            self::SULFURAS => SulfurasItem::class,
+            self::BACKSTAGE => BackstageItem::class,
+        ];
         foreach ($this->items as $item) {
-            if ($item->name === self::SULFURAS) {
-                continue;
-            }
-
-            $num = $this->isExpired($item) ? 2 : 1;
-
-            if ($item->name === self::AGED_BRIE) {
-                $this->increaseQuality($item, $num);
-            } elseif ($item->name === self::BACKSTAGE) {
-                if ($this->isExpired($item)) {
-                    $item->quality = 0;
-                    $item->sellIn--;
-                    continue;
-                }
-                $num = $this->calculateNum($item);
-
-                $this->increaseQuality($item, $num);
-            } else {
-                $this->decreaseQuality($item, $num);
-            }
-
-            $item->sellIn--;
+            $className = $mappingClass[$item->name] ?? NormalItem::class;
+            $class = new $className($item);
+            $class->updateQuality($item);
         }
-    }
-
-    private function increaseQuality(Item $item, int $multiple): void
-    {
-        $item->quality = min($item->quality + $multiple, 50);
-    }
-
-    private function decreaseQuality(Item $item, int $multiple): void
-    {
-        $item->quality = max($item->quality - $multiple, 0);
-    }
-
-    private function isExpired(Item $item): bool
-    {
-        return $item->sellIn <= 0;
-    }
-
-    private function calculateNum(Item $item): int
-    {
-        $num = 1;
-        if ($item->sellIn <= 5) {
-            $num = 3;
-        } elseif ($item->sellIn <= 10) {
-            $num = 2;
-        }
-        return $num;
     }
 }
