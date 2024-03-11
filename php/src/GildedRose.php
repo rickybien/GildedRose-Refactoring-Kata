@@ -14,17 +14,12 @@ final class GildedRose
     public function __construct(array $items)
     {
         $this->items = $items;
-        $this->itemNormal = new ItemNormal();
-        $this->itemAgedBrie =  new ItemAgedBrie();
-        $this->itemSulfuras = new ItemSulfuras();
-        $this->itemBackstagePasses = new ItemBackstagePasses();
-        $this->itemConjured  = new ItemConjured();
     }
 
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            $itemClass = $this->getItemClass($item->name);
+            $itemClass = ItemFactory::getItemClass($item->name);
             $itemClass->setQuality($item->quality);
             $itemClass->setSellIn($item->sellIn);
             $itemClass->modifyQuality();
@@ -32,15 +27,5 @@ final class GildedRose
             $item->quality = $itemClass->getQuality();
             $item->sellIn = $itemClass->getSellIn();
         }
-    }
-
-    public function getItemClass($name){
-        return match ($name) {
-            'normal' => $this->itemNormal,
-            'Aged Brie' => $this->itemAgedBrie,
-            'Sulfuras, Hand of Ragnaros' => $this->itemSulfuras,
-            'Backstage passes to a TAFKAL80ETC concert' => $this->itemBackstagePasses,
-            'Conjured' => $this->itemConjured,
-        };
     }
 }
