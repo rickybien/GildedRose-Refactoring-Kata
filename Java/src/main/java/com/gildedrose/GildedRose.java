@@ -9,33 +9,17 @@ class GildedRose {
         this.items = items;
     }
 
-    public void updateQuality(){
+    public void updateQuality() {
         for (Item item : items) {
-            ItemUpdater updater = createUpdater(item);
+            ItemUpdater updater = new ItemUpdaterBuilder().setItem(item).build();
             updater.update();
-        }
-    }
-
-    /**
-     * 依照物品名稱建立對應的 ItemUpdater
-     */
-    private ItemUpdater createUpdater(Item item) {
-        switch (item.name) {
-            case "Aged Brie":
-                return new AgedBrieUpdater(item);
-            case "Backstage passes to a TAFKAL80ETC concert":
-                return new BackstagePassUpdater(item);
-            case "Sulfuras, Hand of Ragnaros":
-                return new SulfurasUpdater(item);
-            default:
-                return new NormalItemUpdater(item);
         }
     }
 
     /**
      * 首次重構的 updateQuality
      */
-    public void updateQuality2() {
+    public void updateQualityBeforeUpdater() {
         // 物品類: 一般/ Aged Brie/ Backstage passes/ Sulfuras
         for (Item item : items) {
             switch (item.name) {
@@ -72,7 +56,7 @@ class GildedRose {
     }
 
     /**
-     * 除了傳奇物品，每天都會降低品質
+     * 除了傳奇物品，每天都會降低銷售期限
      */
     private void decreaseSellIn(Item item) {
         if (!"Sulfuras, Hand of Ragnaros".equals(item.name)) {
@@ -87,7 +71,7 @@ class GildedRose {
             increaseQuality(item);
         } else if ("Sulfuras, Hand of Ragnaros".equals(item.name)) {
             // Sulfuras 不會過期, 不會降低品質
-        }else{
+        } else {
             decreaseQuality(item);
         }
     }
