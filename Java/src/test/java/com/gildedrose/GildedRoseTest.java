@@ -214,4 +214,62 @@ class GildedRoseTest {
         assertEquals(-2, app.items[0].sellIn);
         assertEquals(0, app.items[0].quality);
     }
+
+    //----------------
+    // Conjured
+    //----------------
+    @Test
+    void testUpdatesConjuredItemsBeforeSellDate() {
+        Item[] items = new Item[] { new Item("Conjured", 5, 10) };
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals(4, app.items[0].sellIn);
+        assertEquals(8, app.items[0].quality);
+    }
+
+    @Test
+    void testUpdatesConjuredItemsBeforeSellDateWithZeroQuality() {
+        Item[] items = new Item[] { new Item("Conjured", 5, 0) };
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals(4, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
+    }
+
+    @Test
+    void testUpdatesConjuredItemsOnSellDate() {
+        Item[] items = new Item[] { new Item("Conjured", 0, 10) };
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals(-1, app.items[0].sellIn);
+        assertEquals(6, app.items[0].quality);
+    }
+
+    @Test
+    void testUpdatesConjuredItemsOnSellDateAtZeroQuality() {
+        Item[] items = new Item[] { new Item("Conjured", 0, 0) };
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals(-1, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
+    }
+
+    @Test
+    void testUpdatesConjuredItemsAfterSellDate() {
+        Item[] items = new Item[] { new Item("Conjured", -10, 10) };
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals(-11, app.items[0].sellIn);
+        assertEquals(6, app.items[0].quality);
+    }
+
+    @Test
+    void testUpdatesConjuredItemsAfterSellDateWithZeroQuality() {
+        Item[] items = new Item[] { new Item("Conjured", -10, 0) };
+        GildedRose app = new GildedRose(items);
+        app.updateQuality();
+        assertEquals(-11, app.items[0].sellIn);
+        assertEquals(0, app.items[0].quality);
+    }
+
 }
