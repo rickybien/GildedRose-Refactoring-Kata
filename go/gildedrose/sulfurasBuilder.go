@@ -15,6 +15,15 @@ func (b *SulfurasBuilder) calculSellIn(item *Item) {
 
 func (b *SulfurasBuilder) calculQuality(item *Item) {
 	b.Quality = item.Quality
+
+	if b.Quality >= 50 {
+		b.Quality = 50
+		return
+	}
+	if b.Quality <= 0 {
+		b.Quality = 0
+		return
+	}
 }
 
 func (b *SulfurasBuilder) getCalculItem() CulcalItem {

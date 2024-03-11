@@ -73,7 +73,7 @@ func (t *gdSuite) TestOther() {
 				{"Other", 2, -1},
 			},
 			ExpSellIn:  -5,
-			ExpQuality: -1,
+			ExpQuality: 0,
 			ExpErr:     nil,
 		},
 		{
@@ -310,7 +310,7 @@ func (t *gdSuite) TestSulfuras() {
 				{"Sulfuras, Hand of Ragnaros", 2, -1},
 			},
 			ExpSellIn:  2,
-			ExpQuality: -1,
+			ExpQuality: 0,
 			ExpErr:     nil,
 		},
 	}
@@ -383,7 +383,7 @@ func (t *gdSuite) TestConjured() {
 				{"Conjured", 2, -1},
 			},
 			ExpSellIn:  -5,
-			ExpQuality: -1,
+			ExpQuality: 0,
 			ExpErr:     nil,
 		},
 		{

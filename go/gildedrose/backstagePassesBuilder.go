@@ -33,6 +33,15 @@ func (b *BackstagePassesBuilder) calculQuality(item *Item) {
 	if b.SellIn < 0 {
 		b.Quality = 0
 	}
+
+	if b.Quality >= 50 {
+		b.Quality = 50
+		return
+	}
+	if b.Quality <= 0 {
+		b.Quality = 0
+		return
+	}
 }
 
 func (b *BackstagePassesBuilder) getCalculItem() CulcalItem {
