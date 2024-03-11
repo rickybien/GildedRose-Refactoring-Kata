@@ -211,7 +211,7 @@ class GildedRoseTest(unittest.TestCase):
     # Conjured
     def testUpdatesConjuredItemsBeforeSellDate(self):
         items = [
-            Item(name="Conjured", sell_in=6, quality=10),
+            Item(name="Conjured Mana Cake", sell_in=6, quality=10),
         ]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
@@ -220,7 +220,7 @@ class GildedRoseTest(unittest.TestCase):
 
     def testUpdatesNormalItemsOnSellDate(self):
         items = [
-            Item(name="Conjured", sell_in=0, quality=10),
+            Item(name="Conjured Mana Cake", sell_in=0, quality=10),
         ]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
@@ -229,7 +229,7 @@ class GildedRoseTest(unittest.TestCase):
 
     def testUpdatesNormalItemsAfterSellDate(self):
         items = [
-            Item(name="Conjured", sell_in=-5, quality=10),
+            Item(name="Conjured Mana Cake", sell_in=-5, quality=10),
         ]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
@@ -238,7 +238,7 @@ class GildedRoseTest(unittest.TestCase):
 
     def testUpdatesNormalItemsWithAQualityOf0(self):
         items = [
-            Item(name="Conjured", sell_in=5, quality=0),
+            Item(name="Conjured Mana Cake", sell_in=5, quality=0),
         ]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
