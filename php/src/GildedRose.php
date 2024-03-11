@@ -24,7 +24,7 @@ final class GildedRose
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            $itemClass = $this->getItemClass($item->name);
+            $itemClass = ItemFactory::getItemClass($item->name);
             $itemClass->setQuality($item->quality);
             $itemClass->setSellIn($item->sellIn);
             $itemClass->modifyQuality();
@@ -32,15 +32,5 @@ final class GildedRose
             $item->quality = $itemClass->getQuality();
             $item->sellIn = $itemClass->getSellIn();
         }
-    }
-
-    public function getItemClass($name){
-        return match ($name) {
-            'normal' => $this->itemNormal,
-            'Aged Brie' => $this->itemAgedBrie,
-            'Sulfuras, Hand of Ragnaros' => $this->itemSulfuras,
-            'Backstage passes to a TAFKAL80ETC concert' => $this->itemBackstagePasses,
-            'Conjured' => $this->itemConjured,
-        };
     }
 }
