@@ -1,4 +1,4 @@
-package com.gildedrose.factory;
+package com.gildedrose;
 
 import com.gildedrose.Item;
 import com.gildedrose.constant.QualityConstant;
@@ -31,9 +31,9 @@ public enum ItemEnum {
         public void updateQuality(Item item) {
             if (item.sellIn > 10) {
                 item.quality = calculateQuality(item.quality, 1);
-            } else if (5 < item.sellIn && item.sellIn <= 10) {
+            } else if (5 < item.sellIn) {
                 item.quality = calculateQuality(item.quality, 2);
-            } else if (0 < item.sellIn && item.sellIn <= 5) {
+            } else if (0 < item.sellIn) {
                 item.quality = calculateQuality(item.quality, 3);
             } else {
                 item.quality = 0;
@@ -65,9 +65,23 @@ public enum ItemEnum {
         this.value = value;
     }
 
+    public static ItemEnum getItemEnum(String itemName) {
+        for (ItemEnum itemEnum : ItemEnum.values()) {
+            if (itemEnum.getValue().equals(itemName)) {
+                return itemEnum;
+            }
+        }
+        return ItemEnum.NORMAL;
+    }
+
     public abstract void updateQuality(Item item);
 
     public void updateSellIn(Item item) {
         item.sellIn--;
+    }
+
+    public void update(Item item) {
+        updateQuality(item);
+        updateSellIn(item);
     }
 }
