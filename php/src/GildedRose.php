@@ -2,10 +2,15 @@
 /**
  * Gilded Rose的Class
  *
- * @version 0.1.0
+ * @version 0.2.1
  * @author eden.chen eden.chen@kkday.com
  * @date 2024/12/4
  * @since 0.1.0 2024/12/4 eden.chen: 新建立PHPDoc
+ * @since 0.1.1 2024/12/4 eden.chen: 重構，替換常用常數
+ * @since 0.1.2 2024/12/4 eden.chen: 重構，處理quality下降
+ * @since 0.1.3 2024/12/4 eden.chen: 重構，處理過期物品
+ * @since 0.2.0 2024/12/4 eden.chen: 增加Conjured規則
+ * @since 0.2.1 2024/12/4 eden.chen: 補齊PHPDoc
  */
 declare(strict_types=1);
 
