@@ -21,7 +21,26 @@ final class GildedRose
      *
      * @var Item[]
      */
-    private $items;
+    private array $items;
+
+    const ITEM = [
+        'agedBrie' => 'Aged Brie',
+        'backstage' => 'Backstage passes to a TAFKAL80ETC concert',
+        'sulfuras' => 'Sulfuras, Hand of Ragnaros',
+        'conjured' => 'Conjured',
+    ];
+
+    const MAX_QUALITY = [
+        'normal' => 50,
+        'legend' => 80,
+    ];
+
+    const MIN_QUALITY = 0;
+
+    const QUALITY_DECREASE_RATE = [
+        'normal' => 1,
+        'double' => 2,
+    ];
 
     /**
      * construct
@@ -41,23 +60,23 @@ final class GildedRose
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            if ($item->name != 'Aged Brie' and $item->name != 'Backstage passes to a TAFKAL80ETC concert') {
-                if ($item->quality > 0) {
-                    if ($item->name != 'Sulfuras, Hand of Ragnaros') {
+            if ($item->name != self::ITEM['agedBrie'] and $item->name != self::ITEM['backstage']) {
+                if ($item->quality > self::MIN_QUALITY) {
+                    if ($item->name != self::ITEM['sulfuras']) {
                         $item->quality = $item->quality - 1;
                     }
                 }
             } else {
-                if ($item->quality < 50) {
+                if ($item->quality < self::MAX_QUALITY['normal']) {
                     $item->quality = $item->quality + 1;
-                    if ($item->name == 'Backstage passes to a TAFKAL80ETC concert') {
+                    if ($item->name == self::ITEM['backstage']) {
                         if ($item->sellIn < 11) {
-                            if ($item->quality < 50) {
+                            if ($item->quality < self::MAX_QUALITY['normal']) {
                                 $item->quality = $item->quality + 1;
                             }
                         }
                         if ($item->sellIn < 6) {
-                            if ($item->quality < 50) {
+                            if ($item->quality < self::MAX_QUALITY['normal']) {
                                 $item->quality = $item->quality + 1;
                             }
                         }
@@ -65,23 +84,23 @@ final class GildedRose
                 }
             }
 
-            if ($item->name != 'Sulfuras, Hand of Ragnaros') {
+            if ($item->name != self::ITEM['sulfuras']) {
                 $item->sellIn = $item->sellIn - 1;
             }
 
-            if ($item->sellIn < 0) {
-                if ($item->name != 'Aged Brie') {
-                    if ($item->name != 'Backstage passes to a TAFKAL80ETC concert') {
-                        if ($item->quality > 0) {
-                            if ($item->name != 'Sulfuras, Hand of Ragnaros') {
+            if ($item->sellIn < self::MIN_QUALITY) {
+                if ($item->name != self::ITEM['agedBrie']) {
+                    if ($item->name != self::ITEM['backstage']) {
+                        if ($item->quality > self::MIN_QUALITY) {
+                            if ($item->name != self::ITEM['sulfuras']) {
                                 $item->quality = $item->quality - 1;
                             }
                         }
                     } else {
-                        $item->quality = $item->quality - $item->quality;
+                        $item->quality = 0;
                     }
                 } else {
-                    if ($item->quality < 50) {
+                    if ($item->quality < self::MAX_QUALITY['normal']) {
                         $item->quality = $item->quality + 1;
                     }
                 }
