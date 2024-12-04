@@ -84,24 +84,26 @@ final class GildedRose
                 }
             }
 
-            if ($item->name != self::ITEM['sulfuras']) {
+            // 處理有效期限下降
+            // 撇除傳奇物品，其餘物品有效期限下降
+            if ($item->name !== self::ITEM['sulfuras']) {
                 $item->sellIn = $item->sellIn - 1;
             }
 
+            // 處理過期物品
             if ($item->sellIn < self::MIN_QUALITY) {
-                if ($item->name != self::ITEM['agedBrie']) {
-                    if ($item->name != self::ITEM['backstage']) {
-                        if ($item->quality > self::MIN_QUALITY) {
-                            if ($item->name != self::ITEM['sulfuras']) {
-                                $item->quality = $item->quality - 1;
-                            }
+                if ($item->name !== self::ITEM['sulfuras']) {
+                    // 撇除傳奇物品
+                    if ($item->name === self::ITEM['agedBrie']) {
+                        if ($item->quality < self::MAX_QUALITY['normal']) {
+                            $item->quality = $item->quality + 1;
                         }
-                    } else {
+                    } elseif ($item->name === self::ITEM['backstage']) {
                         $item->quality = 0;
-                    }
-                } else {
-                    if ($item->quality < self::MAX_QUALITY['normal']) {
-                        $item->quality = $item->quality + 1;
+                    } else {
+                        if ($item->quality > self::MIN_QUALITY) {
+                            $item->quality = $item->quality - 1;
+                        }
                     }
                 }
             }
