@@ -37,9 +37,10 @@ final class GildedRose
 
     const MIN_QUALITY = 0;
 
-    const QUALITY_DECREASE_RATE = [
+    const QUALITY_RATE = [
         'normal' => 1,
         'double' => 2,
+        'triple' => 3,
     ];
 
     /**
@@ -60,27 +61,26 @@ final class GildedRose
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            if ($item->name != self::ITEM['agedBrie'] and $item->name != self::ITEM['backstage']) {
-                if ($item->quality > self::MIN_QUALITY) {
-                    if ($item->name != self::ITEM['sulfuras']) {
-                        $item->quality = $item->quality - 1;
+            // 處理quality下降
+            if (($item->name === self::ITEM['agedBrie']) || ($item->name === self::ITEM['backstage'])) {
+                // 特殊物品，quality上升
+                if ($item->quality < self::MAX_QUALITY['normal']) {
+                    if ($item->name === self::ITEM['backstage']) {
+                        // backstage依規則上升
+                        $item->quality = match (true) {
+                            $item->sellIn < 6 => $item->quality + self::QUALITY_RATE['triple'],
+                            $item->sellIn < 11 => $item->quality + self::QUALITY_RATE['double'],
+                            default => $item->quality + self::QUALITY_RATE['normal'],
+                        };
+                    } else {
+                        // 其餘特殊物品上升1
+                        $item->quality = $item->quality + self::QUALITY_RATE['normal'];
                     }
                 }
-            } else {
-                if ($item->quality < self::MAX_QUALITY['normal']) {
-                    $item->quality = $item->quality + 1;
-                    if ($item->name == self::ITEM['backstage']) {
-                        if ($item->sellIn < 11) {
-                            if ($item->quality < self::MAX_QUALITY['normal']) {
-                                $item->quality = $item->quality + 1;
-                            }
-                        }
-                        if ($item->sellIn < 6) {
-                            if ($item->quality < self::MAX_QUALITY['normal']) {
-                                $item->quality = $item->quality + 1;
-                            }
-                        }
-                    }
+            }elseif ($item->name !== self::ITEM['sulfuras']) {
+                // 撇除傳奇物品，其餘物品下降
+                if ($item->quality > self::MIN_QUALITY) {
+                    $item->quality = $item->quality - self::QUALITY_RATE['normal'];
                 }
             }
 
