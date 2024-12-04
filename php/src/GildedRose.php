@@ -2,7 +2,7 @@
 /**
  * Gilded Rose的Class
  *
- * @version 0.2.1
+ * @version 0.2.2
  * @author eden.chen eden.chen@kkday.com
  * @date 2024/12/4
  * @since 0.1.0 2024/12/4 eden.chen: 新建立PHPDoc
@@ -11,6 +11,7 @@
  * @since 0.1.3 2024/12/4 eden.chen: 重構，處理過期物品
  * @since 0.2.0 2024/12/4 eden.chen: 增加Conjured規則
  * @since 0.2.1 2024/12/4 eden.chen: 補齊PHPDoc
+ * @since 0.2.2 2024/12/4 eden.chen: 整個重構updateQuality
  */
 declare(strict_types=1);
 
@@ -27,26 +28,6 @@ final class GildedRose
      * @var Item[]
      */
     private array $items;
-
-    const ITEM = [
-        'agedBrie' => 'Aged Brie',
-        'backstage' => 'Backstage passes to a TAFKAL80ETC concert',
-        'sulfuras' => 'Sulfuras, Hand of Ragnaros',
-        'conjured' => 'Conjured',
-    ];
-
-    const MAX_QUALITY = [
-        'normal' => 50,
-        'legend' => 80,
-    ];
-
-    const MIN_QUALITY = 0;
-
-    const QUALITY_RATE = [
-        'normal' => 1,
-        'double' => 2,
-        'triple' => 3,
-    ];
 
     /**
      * construct
@@ -66,63 +47,49 @@ final class GildedRose
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            // 處理quality下降
-            if (($item->name === self::ITEM['agedBrie']) || ($item->name === self::ITEM['backstage'])) {
-                // 特殊物品，quality上升
-                if ($item->quality < self::MAX_QUALITY['normal']) {
-                    if ($item->name === self::ITEM['backstage']) {
-                        // backstage依規則上升
-                        $item->quality = match (true) {
-                            $item->sellIn < 6 => $item->quality + self::QUALITY_RATE['triple'],
-                            $item->sellIn < 11 => $item->quality + self::QUALITY_RATE['double'],
-                            default => $item->quality + self::QUALITY_RATE['normal'],
-                        };
-                    } else {
-                        // 其餘特殊物品上升1
-                        $item->quality = $item->quality + self::QUALITY_RATE['normal'];
-                    }
-                }
-            }elseif ($item->name !== self::ITEM['sulfuras']) {
-                // 撇除傳奇物品，其餘物品下降
-                if ($item->name === self::ITEM['conjured']) {
-                    $item->quality = match (true) {
-                        $item->quality < self::QUALITY_RATE['double'] => 0,
-                        default => $item->quality - self::QUALITY_RATE['double'],
-                    };
-                }else{
-                    if ($item->quality > self::MIN_QUALITY) {
-                        $item->quality = $item->quality - self::QUALITY_RATE['normal'];
-                    }
-                }
-            }
-
-            // 處理有效期限下降
-            // 撇除傳奇物品，其餘物品有效期限下降
-            if ($item->name !== self::ITEM['sulfuras']) {
+            // 撇除傳奇品質物品，傳奇品質什麼都不用動
+            if (!array_filter(Constant::ITEM_RULE['legend'], function ($value) use ($item) {
+                return $value['name'] == $item->name;
+            })) {
+                // 處理有效期限
                 $item->sellIn = $item->sellIn - 1;
-            }
 
-            // 處理過期物品，品質變化加快
-            if ($item->sellIn < self::MIN_QUALITY) {
-                if ($item->name !== self::ITEM['sulfuras']) {
-                    // 撇除傳奇物品
-                    if ($item->name === self::ITEM['agedBrie']) {
-                        if ($item->quality < self::MAX_QUALITY['normal']) {
-                            $item->quality = $item->quality + 1;
-                        }
-                    } elseif ($item->name === self::ITEM['backstage']) {
-                        $item->quality = 0;
-                    } elseif ($item->name === self::ITEM['conjured']) {
-                        $item->quality = match (true) {
-                            $item->quality < self::QUALITY_RATE['double'] => 0,
-                            default => $item->quality - self::QUALITY_RATE['double'],
+                // 處理quality變化
+                $itemRule = match ($item->name) {
+                    Constant::ITEM_RULE['normal']['agedBrie']['name'] => Constant::ITEM_RULE['normal']['agedBrie'],
+                    Constant::ITEM_RULE['normal']['backstage']['name'] => Constant::ITEM_RULE['normal']['backstage'],
+                    Constant::ITEM_RULE['normal']['conjured']['name'] => Constant::ITEM_RULE['normal']['conjured'],
+                    default => CONSTANT::ITEM_RULE['normal']['other'],
+                };
+                if ($item->sellIn < 0) {
+                    // 過期，以雙倍速變化
+                    if ($itemRule['qualityType'] === 'increase') {
+                        $item->quality = match ($item->name) {
+                            Constant::ITEM['backstage'] => 0,
+                            default => $item->quality + (2 * $itemRule['qualityRate']),
                         };
                     } else {
-                        if ($item->quality > self::MIN_QUALITY) {
-                            $item->quality = $item->quality - 1;
-                        }
+                        $item->quality = $item->quality - (2 * $itemRule['qualityRate']);
+                    }
+                }else{
+                    // 未過期
+                    if ($itemRule['qualityType'] === 'increase') {
+                        $item->quality = match ($item->name) {
+                            Constant::ITEM['backstage'] => match (true) {
+                                // 剩餘5天時，提高3
+                                $item->sellIn < 5 => $item->quality + 3,
+                                // 剩餘10天時，提高2
+                                $item->sellIn < 10 => $item->quality + 2,
+                                default => $item->quality + $itemRule['qualityRate'],
+                            },
+                            default => $item->quality + $itemRule['qualityRate'],
+                        };
+                    } else {
+                        $item->quality = $item->quality - $itemRule['qualityRate'];
                     }
                 }
+                // 判斷是否超過boundary
+                $item->quality = max(Constant::MIN_QUALITY, min(Constant::MAX_QUALITY, $item->quality));
             }
         }
     }
