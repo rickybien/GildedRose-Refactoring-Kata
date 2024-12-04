@@ -1,21 +1,43 @@
 <?php
-
+/**
+ * Gilded Rose的Class
+ *
+ * @version 0.1.0
+ * @author eden.chen eden.chen@kkday.com
+ * @date 2024/12/4
+ * @since 0.1.0 2024/12/4 eden.chen: 新建立PHPDoc
+ */
 declare(strict_types=1);
 
 namespace GildedRose;
 
+/**
+ * Gilded Rose Class
+ */
 final class GildedRose
 {
     /**
+     * 注入的物品item
+     *
      * @var Item[]
      */
     private $items;
 
+    /**
+     * construct
+     *
+     * @param array $items
+     */
     public function __construct(array $items)
     {
         $this->items = $items;
     }
 
+    /**
+     * 更新品質與有效期限
+     *
+     * @return void
+     */
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
