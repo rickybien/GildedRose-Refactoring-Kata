@@ -79,8 +79,15 @@ final class GildedRose
                 }
             }elseif ($item->name !== self::ITEM['sulfuras']) {
                 // 撇除傳奇物品，其餘物品下降
-                if ($item->quality > self::MIN_QUALITY) {
-                    $item->quality = $item->quality - self::QUALITY_RATE['normal'];
+                if ($item->name === self::ITEM['conjured']) {
+                    $item->quality = match (true) {
+                        $item->quality < self::QUALITY_RATE['double'] => 0,
+                        default => $item->quality - self::QUALITY_RATE['double'],
+                    };
+                }else{
+                    if ($item->quality > self::MIN_QUALITY) {
+                        $item->quality = $item->quality - self::QUALITY_RATE['normal'];
+                    }
                 }
             }
 
@@ -90,7 +97,7 @@ final class GildedRose
                 $item->sellIn = $item->sellIn - 1;
             }
 
-            // 處理過期物品
+            // 處理過期物品，品質變化加快
             if ($item->sellIn < self::MIN_QUALITY) {
                 if ($item->name !== self::ITEM['sulfuras']) {
                     // 撇除傳奇物品
@@ -100,6 +107,11 @@ final class GildedRose
                         }
                     } elseif ($item->name === self::ITEM['backstage']) {
                         $item->quality = 0;
+                    } elseif ($item->name === self::ITEM['conjured']) {
+                        $item->quality = match (true) {
+                            $item->quality < self::QUALITY_RATE['double'] => 0,
+                            default => $item->quality - self::QUALITY_RATE['double'],
+                        };
                     } else {
                         if ($item->quality > self::MIN_QUALITY) {
                             $item->quality = $item->quality - 1;
