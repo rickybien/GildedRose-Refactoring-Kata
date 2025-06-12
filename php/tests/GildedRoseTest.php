@@ -329,4 +329,114 @@ class GildedRoseTest extends TestCase
         $this->assertSame(-2, $items[0]->sellIn);
         $this->assertSame(0, $items[0]->quality);
     }
+
+    /**
+     * conjured item
+     *
+     * @dataProvider dataProviderConjuredForSellDateAndQuality
+     * @param array $input
+     * @param array $expected
+     * @return void
+     */
+    public function testUpdatesConjuredItem(array $input, array $expected): void
+    {
+        // arrange
+        $items = [new Item('Conjured', $input['sellIn'], $input['quality'])];
+        $app = new GildedRose($items);
+
+        // act
+        $app->updateQuality();
+
+        // assert
+        $this->assertSame($expected['sellIn'], $items[0]->sellIn);
+        $this->assertSame($expected['quality'], $items[0]->quality);
+    }
+
+    /**
+     * 測試情境
+     * BeforeSellDate
+     * OnSellDate
+     * AfterSellDate
+     * WithAQualityOf0
+     * CloseToMinQualityBeforeSellDate
+     * CloseToMinQualityOnSellDate
+     * CloseToMinQualityAfterSellDate
+     *
+     * @return array[]
+     */
+    public function dataProviderConjuredForSellDateAndQuality(): array
+    {
+        return [
+            'BeforeSellDate' => [
+                'input' => [
+                    'sellIn' => 5,
+                    'quality' => 10,
+                ],
+                'expected' => [
+                    'sellIn' => 4,
+                    'quality' => 8,
+                ],
+            ],
+            'OnSellDate' => [
+                'input' => [
+                    'sellIn' => 0,
+                    'quality' => 10,
+                ],
+                'expected' => [
+                    'sellIn' => -1,
+                    'quality' => 6,
+                ],
+            ],
+            'AfterSellDate' => [
+                'input' => [
+                    'sellIn' => -5,
+                    'quality' => 10,
+                ],
+                'expected' => [
+                    'sellIn' => -6,
+                    'quality' => 6,
+                ],
+            ],
+            'WithAQualityOf0' => [
+                'input' => [
+                    'sellIn' => 5,
+                    'quality' => 0,
+                ],
+                'expected' => [
+                    'sellIn' => 4,
+                    'quality' => 0,
+                ],
+            ],
+            'CloseToMinQualityBeforeSellDate' => [
+                'input' => [
+                    'sellIn' => 5,
+                    'quality' => 1,
+                ],
+                'expected' => [
+                    'sellIn' => 4,
+                    'quality' => 0,
+                ],
+            ],
+            'CloseToMinQualityOnSellDate' => [
+                'input' => [
+                    'sellIn' => 0,
+                    'quality' => 1,
+                ],
+                'expected' => [
+                    'sellIn' => -1,
+                    'quality' => 0,
+                ],
+            ],
+            'CloseToMinQualityAfterSellDate' => [
+                'input' => [
+                    'sellIn' => -2,
+                    'quality' => 1,
+                ],
+                'expected' => [
+                    'sellIn' => -3,
+                    'quality' => 0,
+                ],
+            ],
+        ];
+    }
 }
