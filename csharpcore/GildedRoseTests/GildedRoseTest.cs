@@ -1,6 +1,6 @@
-﻿using Xunit;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GildedRoseKata;
+using Xunit;
 
 namespace GildedRoseTests
 {
@@ -345,6 +345,100 @@ namespace GildedRoseTests
 
             // assert
             Assert.Equal(-2, Items[0].SellIn);
+            Assert.Equal(0, Items[0].Quality);
+        }
+
+        //---------------
+        // Conjured item
+        // ---------------
+
+        [Fact]
+        public void testUpdatesConjuredItemsLongBeforeSellDate()
+        {
+            // arrange
+            IList<Item> Items = new List<Item> { new() { Name = "Conjured", SellIn = 10, Quality = 10 } };
+            var app = new GildedRose(Items);
+
+            // act
+            app.UpdateQuality();
+
+            // assert
+            Assert.Equal(9, Items[0].SellIn);
+            Assert.Equal(8, Items[0].Quality);
+        }
+
+        [Fact]
+        public void testUpdatesConjuredItemsCloseToBeforeSellDate()
+        {
+            // arrange
+            IList<Item> Items = new List<Item> { new() { Name = "Conjured", SellIn = 3, Quality = 10 } };
+            var app = new GildedRose(Items);
+
+            // act
+            app.UpdateQuality();
+
+            // assert
+            Assert.Equal(2, Items[0].SellIn);
+            Assert.Equal(8, Items[0].Quality);
+        }
+
+        [Fact]
+        public void testUpdatesConjuredItemsWithQualityOf0()
+        {
+            // arrange
+            IList<Item> Items = new List<Item> { new() { Name = "Conjured", SellIn = 2, Quality = 0 } };
+            var app = new GildedRose(Items);
+
+            // act
+            app.UpdateQuality();
+
+            // assert
+            Assert.Equal(1, Items[0].SellIn);
+            Assert.Equal(0, Items[0].Quality);
+        }
+
+        [Fact]
+        public void testUpdatesConjuredItemsAfterSellDate()
+        {
+            // arrange
+            IList<Item> Items = new List<Item> { new() { Name = "Conjured", SellIn = 0, Quality = 10 } };
+            var app = new GildedRose(Items);
+
+            // act
+            app.UpdateQuality();
+
+            // assert
+            Assert.Equal(-1, Items[0].SellIn);
+            Assert.Equal(6, Items[0].Quality);
+        }
+
+        [Fact]
+        public void testUpdatesConjuredItemsWhiteQualityOf0AfterSellDate()
+        {
+            // arrange
+            IList<Item> Items = new List<Item> { new() { Name = "Conjured", SellIn = 0, Quality = 0 } };
+            var app = new GildedRose(Items);
+
+            // act
+            app.UpdateQuality();
+
+            // assert
+            Assert.Equal(-1, Items[0].SellIn);
+            Assert.Equal(0, Items[0].Quality);
+        }
+
+        [Fact]
+        public void testUpdatesConjuredItemsWhiteQualityCloseTo0AfterSellDate()
+        {
+            // arrange
+            IList<Item> Items = new List<Item> { new() { Name = "Conjured", SellIn = 0, Quality = 1 } };
+            var app = new GildedRose(Items);
+
+            // act
+            app.UpdateQuality();
+
+            // assert
+            Assert.Equal(-1, Items[0].SellIn);
             Assert.Equal(0, Items[0].Quality);
         }
     }

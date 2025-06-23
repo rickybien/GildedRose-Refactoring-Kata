@@ -4,85 +4,121 @@ namespace GildedRoseKata
 {
     public class GildedRose
     {
-        IList<Item> Items;
-        public GildedRose(IList<Item> Items)
+        private readonly IList<Item> _items;
+        public GildedRose(IList<Item> items)
         {
-            this.Items = Items;
+            _items = items;
         }
 
         public void UpdateQuality()
         {
-            for (var i = 0; i < Items.Count; i++)
+            var factory = new Factory();
+
+            foreach (var item in _items)
             {
-                if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                {
-                    if (Items[i].Quality > 0)
-                    {
-                        if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                        {
-                            Items[i].Quality = Items[i].Quality - 1;
-                        }
-                    }
-                }
-                else
-                {
-                    if (Items[i].Quality < 50)
-                    {
-                        Items[i].Quality = Items[i].Quality + 1;
+                var itemFactory = factory.Create(item);
+                itemFactory.Decline(item);
+            }
+        }
 
-                        if (Items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].SellIn < 11)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
+        public interface IItem
+        {
+            public Item Decline(Item item);
+        }
 
-                            if (Items[i].SellIn < 6)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
+        public class Factory
+        {
+            public IItem Create(Item item)
+            {
+                return item.Name switch
                 {
-                    Items[i].SellIn = Items[i].SellIn - 1;
+                    "Sulfuras, Hand of Ragnaros" => new Sulfuras(),
+                    "Backstage passes to a TAFKAL80ETC concert" => new BackstagePass(),
+                    "Aged Brie" => new AgedBrie(),
+                    "Conjured" => new Conjured(),
+                    _ => new NormalItem()
+                };
+            }
+        }
+
+        public class NormalItem : IItem
+        {
+            public Item Decline(Item item)
+            {
+                var declineQuantityUnit = 1;
+                var declineQuantityRate = item.SellIn <= 0 ? 2 : 1;
+
+                item.Quality -= declineQuantityUnit * declineQuantityRate;
+
+                if (item.Quality < 0) item.Quality = 0;
+
+                item.SellIn -= 1;
+                return item;
+            }
+        }
+
+        public class Sulfuras : IItem
+        {
+            public Item Decline(Item item)
+            {
+                return item;
+            }
+        }
+
+        public class BackstagePass : IItem
+        {
+            public Item Decline(Item item)
+            {
+                if (item.SellIn <= 0)
+                {
+                    item.SellIn -= 1;
+                    item.Quality = 0;
+                    return item;
                 }
 
-                if (Items[i].SellIn < 0)
-                {
-                    if (Items[i].Name != "Aged Brie")
-                    {
-                        if (Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].Quality > 0)
-                            {
-                                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                                {
-                                    Items[i].Quality = Items[i].Quality - 1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Items[i].Quality = Items[i].Quality - Items[i].Quality;
-                        }
-                    }
-                    else
-                    {
-                        if (Items[i].Quality < 50)
-                        {
-                            Items[i].Quality = Items[i].Quality + 1;
-                        }
-                    }
-                }
+                var declineQuantityUnit = 1;
+
+                if (item.SellIn < 11 && item.SellIn > 5) declineQuantityUnit += 1;
+                if (item.SellIn <= 5) declineQuantityUnit += 2;
+
+                item.Quality += declineQuantityUnit;
+                
+                if (item.Quality > 50) item.Quality = 50;
+
+                item.SellIn -= 1;
+                return item;
+            }
+        }
+
+        public class AgedBrie : IItem
+        {
+            public Item Decline(Item item)
+            {
+                item.Quality += 1;
+
+                if (item.SellIn <= 0) item.Quality += 1;
+
+                if (item.Quality > 50) item.Quality = 50;
+
+                item.SellIn -= 1;
+                return item;
+            }
+        }
+
+        public class Conjured : IItem
+        {
+            public Item Decline(Item item)
+            {
+                var declineQuantityUnit = 1;
+                var declineQuantityRate = item.SellIn <= 0 ? 4 : 2;
+
+                item.Quality -= declineQuantityUnit * declineQuantityRate;
+                
+                if (item.Quality < 0) item.Quality = 0;
+
+                item.SellIn -= 1;
+
+                return item;
             }
         }
     }
