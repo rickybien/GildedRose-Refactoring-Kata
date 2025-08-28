@@ -1,5 +1,5 @@
 class Item {
-  constructor(name, sellIn, quality){
+  constructor(name, sellIn, quality) {
     this.name = name;
     this.sellIn = sellIn;
     this.quality = quality;
@@ -7,57 +7,120 @@ class Item {
 }
 
 class Shop {
-  constructor(items=[]){
+  constructor(items = []) {
     this.items = items;
   }
+
   updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1;
+    const {
+      items,
+      isLegendaryItem,
+      normalItemMap,
+    } = this;
+
+    items.forEach(item => {
+      const {name} = item;
+
+      if (!isLegendaryItem(name)) {
+        item.sellIn -= 1;
+
+        if (item.quality > 0 && item.quality < 50) {
+          if (this.isAgedBrieItem(name)) {
+            this.updateAgedBrieItem(item);
+          }
+
+          if (this.isBackstagePassesItem(name)) {
+            this.updateBackstagePassesItem(item);
+          }
+
+          if (this.isConjuredItem(name)) {
+            this.updateConjuredItem(item);
+          }
+
+          if (this.isNormalItem(name)) {
+            this.updateNormalItem(item);
           }
         }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-          }
+
+        if (item.quality > 50) {
+          item.quality = 50;
         }
       }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1;
-              }
-            }
-          } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality;
-          }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
-        }
-      }
-    }
+    });
 
     return this.items;
+  }
+
+  isLegendaryItem(name) {
+    return name.includes('Sulfuras');
+  }
+
+  isAgedBrieItem(name) {
+    return name.includes('Aged Brie');
+  }
+
+  isBackstagePassesItem(name) {
+    return name.includes('Backstage passes');
+  }
+
+  isConjuredItem(name) {
+    return name.includes('Conjured');
+  }
+
+  isNormalItem(name) {
+    return !this.isAgedBrieItem(name) && !this.isBackstagePassesItem(name) && !this.isConjuredItem(name);
+  }
+
+  minusItemQuality(item, quality = 1, multiple = 1) {
+    item.quality -= (quality * multiple);
+  }
+
+  plusItemQuality(item, quality = 1, multiple = 1) {
+    item.quality += (quality * multiple);
+  }
+
+  updateNormalItem(item) {
+    const {name, sellIn, quality} = item;
+
+    if (sellIn < 0) {
+      this.minusItemQuality(item, 1, 2);
+    } else {
+      this.minusItemQuality(item, 1, 1);
+    }
+  }
+
+  updateAgedBrieItem(item) {
+    const {name, sellIn, quality} = item;
+
+    if (sellIn < 0) {
+      this.plusItemQuality(item, 1, 2);
+    } else {
+      this.plusItemQuality(item, 1, 1);
+    }
+  }
+
+  updateBackstagePassesItem(item) {
+    const {name, sellIn, quality} = item;
+
+    if (sellIn >= 10) {
+      this.plusItemQuality(item, 1, 1);
+    } else if (sellIn < 10 && sellIn >= 6) {
+      this.plusItemQuality(item, 2, 1);
+    } else if (sellIn < 5 && sellIn >= 0) {
+      this.plusItemQuality(item, 3, 1);
+    } else {
+      item.quality = 0;
+    }
+  }
+
+  updateConjuredItem(item) {
+    const {name, sellIn, quality} = item;
+
+    if (sellIn < 0) {
+      this.minusItemQuality(item, 1, 4);
+    } else {
+      this.minusItemQuality(item, 1, 2);
+    }
   }
 }
 
