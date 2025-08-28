@@ -11,49 +11,65 @@ class Shop {
     this.items = items;
   }
   updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1;
-          }
-        }
+    for (let item of this.items) {
+      let productName;
+      if(item.name.includes('Backstage passes')){
+        productName = 'Backstage passes';
+      } else if(item.name.includes('Conjured')){
+        productName = 'Conjured';
+      } else if(item.name.includes('Aged Brie')){
+        productName = 'Aged Brie';
+      } else if(item.name.includes('Sulfuras')){
+        productName = 'Sulfuras';
       } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-          }
-        }
+        productName = 'normal';
       }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1;
-              }
+
+      switch (productName) {
+        case 'Aged Brie':
+          if(item.quality < 50){
+            item.quality++;
+          }
+          item.sellIn --;
+          if(item.sellIn < 0 && item.quality < 50){
+            item.quality++;
+          }
+          break;
+        case 'Backstage passes':
+          if(item.quality < 50){
+            item.quality++;
+            if(item.sellIn < 11) {
+              item.quality++;
             }
-          } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality;
+            if(item.sellIn < 6) {
+              item.quality++;
+            }
           }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
+          item.sellIn --;
+          if(item.sellIn < 0){
+            item.quality = 0;
           }
-        }
+          break;
+        case 'Sulfuras':
+          break;
+        case 'Conjured':
+          if (item.quality > 0) {
+            item.quality = item.quality - 2;
+          }
+          item.sellIn--;
+          if(item.sellIn < 0 && item.quality > 0){
+            item.quality = item.quality - 2;
+          }
+          break;
+        default:
+          if (item.quality > 0) {
+            item.quality--;
+          }
+          item.sellIn--;
+          if (item.sellIn < 0 && item.quality > 0) {
+            item.quality--;
+          }
+          break;
       }
     }
 
