@@ -184,7 +184,7 @@ class GildedRoseTest extends TestCase
 
         // assert
         $this->assertSame(5, $items[0]->sellIn);
-        $this->assertSame(10, $items[0]->quality);
+        $this->assertSame(80, $items[0]->quality);
     }
 
     public function testUpdatesSulfurasItemsOnSellDate(): void
@@ -198,7 +198,7 @@ class GildedRoseTest extends TestCase
 
         // assert
         $this->assertSame(0, $items[0]->sellIn);
-        $this->assertSame(10, $items[0]->quality);
+        $this->assertSame(80, $items[0]->quality);
     }
 
     public function testUpdatesSulfurasItemsAfterSellDate(): void
@@ -212,7 +212,7 @@ class GildedRoseTest extends TestCase
 
         // assert
         $this->assertSame(-1, $items[0]->sellIn);
-        $this->assertSame(10, $items[0]->quality);
+        $this->assertSame(80, $items[0]->quality);
     }
 
     //-----------------
@@ -327,6 +327,65 @@ class GildedRoseTest extends TestCase
 
         // assert
         $this->assertSame(-2, $items[0]->sellIn);
+        $this->assertSame(0, $items[0]->quality);
+    }
+
+    //-----------------
+    // Conjured item
+    //-----------------
+    public function testUpdatesConjuredItemsBeforeSellDate(): void
+    {
+        // arrange
+        $items = [new Item('Conjured', 5, 10)];
+        $app = new GildedRose($items);
+
+        // act
+        $app->updateQuality();
+
+        // assert
+        $this->assertSame(4, $items[0]->sellIn);
+        $this->assertSame(8, $items[0]->quality);
+    }
+
+    public function testUpdatesConjuredItemsOnSellDate(): void
+    {
+        // arrange
+        $items = [new Item('Conjured', 0, 10)];
+        $app = new GildedRose($items);
+
+        // act
+        $app->updateQuality();
+
+        // assert
+        $this->assertSame(-1, $items[0]->sellIn);
+        $this->assertSame(6, $items[0]->quality);
+    }
+
+    public function testUpdatesConjuredItemsAfterSellDate(): void
+    {
+        // arrange
+        $items = [new Item('Conjured', -5, 10)];
+        $app = new GildedRose($items);
+
+        // act
+        $app->updateQuality();
+
+        // assert
+        $this->assertSame(-6, $items[0]->sellIn);
+        $this->assertSame(6, $items[0]->quality);
+    }
+
+    public function testUpdatesConjuredItemsWithAQualityOf0(): void
+    {
+        // arrange
+        $items = [new Item('Conjured', 5, 0)];
+        $app = new GildedRose($items);
+
+        // act
+        $app->updateQuality();
+
+        // assert
+        $this->assertSame(4, $items[0]->sellIn);
         $this->assertSame(0, $items[0]->quality);
     }
 }
