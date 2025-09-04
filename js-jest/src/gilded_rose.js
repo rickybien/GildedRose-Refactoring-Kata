@@ -30,6 +30,13 @@ class Shop {
 		SULFURAS: {
 			name: 'Sulfuras, Hand of Ragnaros'
 		},
+		CONJURED: {
+			name: 'Conjured',
+			passQualityRules: {
+				expired: -4,
+				notExpired: -2,
+			} 
+		},
 		NORMAL: {
 			passQualityRules: {
 				expired: -2,
@@ -88,6 +95,14 @@ class Shop {
 							increment: Shop.SELLING_PRODUCTS.BACKSTAGE_PASSES.passQualityRules[this.getBackstagePassQualityRuleKey(sellIn)]
 						});
 					}
+					break;
+				case Shop.SELLING_PRODUCTS.CONJURED.name:
+					quality = this.calculateQuality({
+						value: quality, 
+						increment: this.isExpired(sellIn) ? 
+							Shop.SELLING_PRODUCTS.CONJURED.passQualityRules.expired : 
+							Shop.SELLING_PRODUCTS.CONJURED.passQualityRules.notExpired
+					});
 					break;
 				default:
 					quality = this.calculateQuality({
