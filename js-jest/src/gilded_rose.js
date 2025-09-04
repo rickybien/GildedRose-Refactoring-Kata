@@ -7,57 +7,104 @@ class Item {
 }
 
 class Shop {
-  constructor(items=[]){
-    this.items = items;
+	constructor(items=[]){
+		this.items = items;
   }
-  updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1;
-          }
-        }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-          }
-        }
-      }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1;
-              }
-            }
-          } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality;
-          }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
-        }
-      }
-    }
 
-    return this.items;
+	static SELLING_PRODUCTS = {
+		AGED_BRIE: {
+			name: 'Aged Brie',
+			passQualityRules: {
+				expired: 2,
+				notExpired: 1,
+			} 
+		},
+		BACKSTAGE_PASSES: {
+			name: 'Backstage passes to a TAFKAL80ETC concert',
+			passQualityRules: {
+				expiresIn5Days: 3,
+				expiresIn10Days: 2,
+				notExpired: 1,
+			} 
+		},
+		SULFURAS: {
+			name: 'Sulfuras, Hand of Ragnaros'
+		},
+		NORMAL: {
+			passQualityRules: {
+				expired: -2,
+				notExpired: -1,
+			} 
+		}
+	};
+
+	static ITEM_QUALITY_LIMITS = {
+		MAX_VALUE: 50,
+		MIN_VALUE: 0,
+	}
+
+	isExpired(sellIn = ITEM_QUALITY_LIMITS.MIN_VALUE) {
+		return sellIn <= 0;
+	}
+
+	calculateQuality({value = ITEM_QUALITY_LIMITS.MIN_VALUE, increment = ITEM_QUALITY_LIMITS.MIN_VALUE}) {
+		const result = value + increment;
+  	return result > Shop.ITEM_QUALITY_LIMITS.MAX_VALUE ?
+			Shop.ITEM_QUALITY_LIMITS.MAX_VALUE : result < Shop.ITEM_QUALITY_LIMITS.MIN_VALUE ?
+			Shop.ITEM_QUALITY_LIMITS.MIN_VALUE : result;
+  }
+
+	getBackstagePassQualityRuleKey(sellIn = ITEM_QUALITY_LIMITS.MIN_VALUE) {
+		const rulesMap = [
+			{ condition: (sellIn) => sellIn <= 5, ruleKey: 'expiresIn5Days' },
+			{ condition: (sellIn) => sellIn <= 10, ruleKey: 'expiresIn10Days' },
+			{ condition: () => true, ruleKey: 'notExpired' },
+		];
+
+		return rulesMap.find(rule => rule.condition(sellIn)).ruleKey;
+	}
+
+  updateQuality() {
+		return this.items.map(item=> {
+			let { name, sellIn, quality } = item;
+
+			switch (name) {
+				case Shop.SELLING_PRODUCTS.SULFURAS.name:
+					return item;
+				case Shop.SELLING_PRODUCTS.AGED_BRIE.name:
+					quality = this.calculateQuality({
+						value: quality,
+						increment: this.isExpired(sellIn) ? 
+							Shop.SELLING_PRODUCTS.AGED_BRIE.passQualityRules.expired : 
+							Shop.SELLING_PRODUCTS.AGED_BRIE.passQualityRules.notExpired
+					});
+					break;
+				case Shop.SELLING_PRODUCTS.BACKSTAGE_PASSES.name:
+					if (this.isExpired(sellIn)) {
+						quality = Shop.ITEM_QUALITY_LIMITS.MIN_VALUE;
+					} else {
+						quality = this.calculateQuality({
+							value: quality,
+							increment: Shop.SELLING_PRODUCTS.BACKSTAGE_PASSES.passQualityRules[this.getBackstagePassQualityRuleKey(sellIn)]
+						});
+					}
+					break;
+				default:
+					quality = this.calculateQuality({
+						value: quality,
+						increment: this.isExpired(sellIn) ? 
+							Shop.SELLING_PRODUCTS.NORMAL.passQualityRules.expired : 
+							Shop.SELLING_PRODUCTS.NORMAL.passQualityRules.notExpired
+					});
+					break;
+			}
+
+			return ({
+				name,
+				sellIn: name === Shop.SELLING_PRODUCTS.SULFURAS.name ? sellIn : sellIn - 1,
+				quality,
+			})
+		})
   }
 }
 
